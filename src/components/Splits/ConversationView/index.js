@@ -1,50 +1,66 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Spin, Avatar } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "../../common/InfiniteScroll";
 import ChatBubble from "../../common/ChatBubble";
 import { ConversationWrapper, LoadMoreWrapper } from "./styles";
-import { sampleMessages } from "./data";
 import axios from "axios";
 import { getLoggedInUser } from "../../../utils/auth";
+import { useParams } from "react-router-dom";
+import MessageContent from "./MessageContent";
 
 export default function ConversationView({
   contentRef,
   recipientInfo,
-  activeSplit,
+  setRecipientInfo,
+  threadInfo,
+  setThreadInfo,
+  messages,
+  setMessages,
+  isMessagesLoading,
+  setIsMessagesLoading,
+  isTyping,
 }) {
-  const [messages, setMessages] = useState([]);
   const messagesRef = useRef([]);
   useEffect(() => {
-    console.log(messages);
     messagesRef.current = messages;
   }, [messages]);
-
-  const activeSplitRef = useRef();
-  useEffect(() => {
-    activeSplitRef.current = activeSplit;
-  }, [activeSplit]);
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  useEffect(() => setIsMessagesLoading(loading), [loading]);
+
+  const { threadId } = useParams();
+
   const user = getLoggedInUser();
+
+  const updateThreadInfo = (result) => {
+    const thread = result.data.result.threadInfo;
+    setThreadInfo(thread);
+    const otherUser = thread.thread_participants_info.find(
+      (p) => p._id !== user._id
+    );
+
+    setRecipientInfo(otherUser);
+  };
 
   const handleInfiniteOnLoad = () => {
     return new Promise((resolve, reject) => {
-      console.log(activeSplit, activeSplitRef.current);
       setLoading(true);
       axios
         .get("/rest/v1/messages/getMessages", {
           params: {
-            tab_id: activeSplitRef.current || activeSplit,
+            thread_id: threadId,
             limit: 25,
             offset: messagesRef.current.length,
           },
         })
         .then((result) => {
           if (result.data.status === 200) {
-            const previousMessages = result.data.result.reverse();
+            if (messagesRef.current.length === 0) updateThreadInfo(result);
+
+            const previousMessages = result.data.result.messages.reverse();
             if (previousMessages.length < 25) setHasMore(false);
             setMessages((messages) => [...previousMessages, ...messages]);
             setLoading(false);
@@ -97,6 +113,14 @@ export default function ConversationView({
     }
   };
 
+  const isLastReadMessage = (m) => {
+    let lastReadMessage = threadInfo.seen_status.find(
+      (s) => s.user_id !== user._id
+    ).last_read_message_id;
+
+    return lastReadMessage === m._id;
+  };
+
   return (
     <InfiniteScroll
       containerRef={contentRef}
@@ -111,17 +135,34 @@ export default function ConversationView({
         ) : (
           <div className="loading-container"></div>
         )}
+        {console.log(messages)}
         {messages.map((message, index) => (
-          <ChatBubble
-            type={message.sender === user._id ? "mine" : "other"}
-            ghost={isOnlyEmojis(message.content)}
-            tight={isOnlyEmojis(message.content)}
-            textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
-            position={getMessagePosition(message, index)}
-            recipientInfo={recipientInfo}
-          >
-            {message.content}
-          </ChatBubble>
+          <div key={message._id}>
+            <ChatBubble
+              type={message.sender === user._id ? "mine" : "other"}
+              ghost={isOnlyEmojis(message.content)}
+              tight={isOnlyEmojis(message.content) || message.type === "image"}
+              textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
+              position={getMessagePosition(message, index)}
+              recipientInfo={recipientInfo}
+            >
+              <MessageContent message={message} />
+            </ChatBubble>
+            {isLastReadMessage(message) && (
+              <div className="recipient-indicator">
+                <Avatar src={recipientInfo.display_picture} size={18} />
+                {isTyping && (
+                  <div className="typing-container">
+                    <div className="tiblock">
+                      <div className="tidot"></div>
+                      <div className="tidot"></div>
+                      <div className="tidot"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         ))}
       </ConversationWrapper>
     </InfiniteScroll>

@@ -5,9 +5,10 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
+import { serverUrl } from "./utils/url";
 
 /* axios.defaults.baseURL = "http://localhost:26398/api/"; */
-axios.defaults.baseURL = "https://comma-messenger.herokuapp.com/api/";
+axios.defaults.baseURL = `${serverUrl}/api/`;
 
 ReactDOM.render(
   <React.StrictMode>

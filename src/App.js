@@ -5,8 +5,10 @@ import ChatListPage from "./pages/ChatList";
 import { PageWrapper } from "./components/common/PageWrapper/styles";
 import SplitsPage from "./pages/Splits";
 import LoginPage from "./pages/Login";
-import React from "react";
+import React, { useEffect } from "react";
 import { UserProvider } from "./contexts/UserContext";
+import socket from "./WebSocket";
+import { rEmit } from "./utils/socket";
 
 const routes = [
   { path: "/conversations", name: "Conversations", Component: ChatListPage },
@@ -16,6 +18,20 @@ const routes = [
 ];
 
 function App() {
+  const connectSocket = () => {
+    console.log("connecting to realtime...");
+    rEmit("_connect", {});
+  };
+
+  useEffect(() => {
+    socket.on("connect", connectSocket);
+    socket.on("reconnect", connectSocket);
+
+    socket.on("_connect", () => {
+      console.log("connected.");
+    });
+  }, []);
+
   return (
     <UserProvider>
       <Router>

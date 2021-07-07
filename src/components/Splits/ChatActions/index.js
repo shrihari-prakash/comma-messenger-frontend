@@ -1,17 +1,14 @@
 import React from "react";
 import ChatComposer from "../ChatComposer";
-import SplitButtonGroup from "../SplitButtonGroup";
 import { ChatActionsWrapper } from "./styles";
 
-export default function ChatActions({ splits, activeSplit, onSplitChange }) {
+export default function ChatActions({ contentRef, sendMessage }) {
   return (
     <ChatActionsWrapper>
-      <SplitButtonGroup
-        splits={splits}
-        activeSplit={activeSplit}
-        onSplitChange={onSplitChange}
-      ></SplitButtonGroup>
-      <ChatComposer></ChatComposer>
+      <ChatComposer
+        contentRef={contentRef}
+        sendMessage={sendMessage}
+      ></ChatComposer>
     </ChatActionsWrapper>
   );
 }

@@ -63,6 +63,11 @@ export const ChatBubbleWrapper = styled.div`
     }};
     float: ${(p) => (p.type === "mine" ? "right" : "left")};
     padding: ${(p) => (p.tight === false ? "10px" : "0")};
+    overflow: hidden;
+
+    .ant-image {
+      display: block;
+    }
 
     @media only screen and (min-width: 768px) {
       margin: 2px 0;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FriendListWrapper } from "./styles";
 
-import { List, message, Avatar, Spin, Skeleton } from "antd";
+import { Avatar, Spin, Skeleton } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroller";
 import { StyledList } from "../../common/List/styles";
@@ -11,9 +11,6 @@ import axios from "axios";
 import moment from "moment";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-
-const fakeDataUrl =
-  "https://randomuser.me/api/?results=25&inc=name,gender,email,nat&noinfo";
 
 export default function FriendList() {
   const history = useHistory();
@@ -30,7 +27,7 @@ export default function FriendList() {
         .get("/rest/v1/threads/getThreads", {
           params: {
             limit: 25,
-            offset: 0,
+            offset: friendList.length,
           },
         })
         .then((result) => {
@@ -63,17 +60,7 @@ export default function FriendList() {
     /* connectSocket(); */
     /* socket.on("_messageIn", markNewConversation); */
     document.addEventListener("visibilitychange", updateConversations);
-    getThreads().then((threads) => {
-      threads.forEach((thread, index) => {
-        let allParticipants = thread.thread_participants;
-        threads[index].other_user = allParticipants.find((participant) => {
-          return participant._id !== user._id;
-        });
-      });
-      setFriendlist(threads);
-      setInitialLoad(false);
-      return setLoading(false);
-    });
+    fetchFriends(() => null);
     /* subscribeUser(); */
     // returned function will be called on component unmount
     return () => {
@@ -84,23 +71,23 @@ export default function FriendList() {
   }, []);
 
   const fetchFriends = (callback) => {
-    fetch(fakeDataUrl)
-      .then((response) => response.json())
-      .then((data) => callback(data));
+    getThreads().then((threads) => {
+      threads.forEach((thread, index) => {
+        let allParticipants = thread.thread_participants;
+        threads[index].other_user = allParticipants.find((participant) => {
+          return participant._id !== user._id;
+        });
+      });
+      setFriendlist((t) => [...t, ...threads]);
+      setInitialLoad(false);
+      if (threads.length < 25) setHasMore(false);
+      return setLoading(false);
+    });
   };
 
   const handleInfiniteOnLoad = () => {
     setLoading(true);
-    if (friendList.length > 200) {
-      message.warning("Infinite List loaded all");
-      setLoading(false);
-      setHasMore(false);
-      return;
-    }
-    fetchFriends((res) => {
-      setFriendlist((fl) => [...fl, ...res.results]);
-      setLoading(false);
-    });
+    fetchFriends((res) => null);
   };
 
   const getThreadContact = (conversation) => {

@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import Cookies from "universal-cookie";
 import { useEffect } from "react";
 import { isLoggedIn } from "../../utils/auth";
+import { serverUrl } from "../../utils/url";
 
 const Login = () => {
   const history = useHistory();
@@ -20,8 +21,7 @@ const Login = () => {
 
   const redirectToGoogle = () => {
     /*  window.location.href = "http://localhost:26398/api/rest/v1/auth/google"; */
-    window.location.href =
-      "https://comma-messenger.herokuapp.com/api/rest/v1/auth/google";
+    window.location.href = `${serverUrl}/api/rest/v1/auth/google`;
   };
 
   const redirectToConversations = () => history.push("/conversations");

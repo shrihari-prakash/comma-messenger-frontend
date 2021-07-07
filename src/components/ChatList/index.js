@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import FriendList from "./FriendList";
 import Header from "./Header";
 import { ChatListContainer } from "./styles";

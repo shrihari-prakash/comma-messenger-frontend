@@ -17,6 +17,7 @@ export default function SplitButtonGroup({
       {splits ? (
         splits.map((s) => (
           <TabButton
+            key={s._id}
             className="tab-button"
             onClick={() => onSplitChange(s._id)}
             active={activeSplit === s._id}

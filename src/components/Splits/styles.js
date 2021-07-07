@@ -50,7 +50,22 @@ export const HeaderUserWrapper = styled.div`
   font-size: large;
   color: ${Theme.COLORS.ON_BACKGROUND};
 
+  .user-name {
+    animation: appear 0.3s;
+  }
+
   .ant-avatar {
     margin-right: 12px;
+  }
+
+  @keyframes appear {
+    from {
+      transform: scale(1.2) translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
   }
 `;
