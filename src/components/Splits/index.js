@@ -9,10 +9,7 @@ import PageHeader from "../common/PageHeader";
 import ChatActions from "./ChatActions";
 import ConversationView from "./ConversationView";
 import { HeaderUserWrapper, SplitsWrapper } from "./styles";
-import Cookies from "universal-cookie";
 import { rEmit } from "../../utils/socket";
-
-const cookies = new Cookies();
 
 export default function Splits() {
   const history = useHistory();
@@ -42,6 +39,8 @@ export default function Splits() {
   useEffect(() => (threadInfoRef.current = threadInfo), [threadInfo]);
 
   const addMessageToState = (message) => {
+    if (message.thread_id !== threadId) return;
+
     console.log("isMessageListLoading", isMessagesLoadingRef);
     if (isMessagesLoadingRef.current === true) {
       messageQueue.current.push(message);
@@ -113,10 +112,9 @@ export default function Splits() {
   };
 
   const updateSeen = (messageId) => {
-    //If user is in some other tab or is not currently focussed on the messenger.
     if (document.visibilityState === "hidden") return;
 
-    if (!messageId && messagesRef.current.length === 0) return;
+    if (messagesRef.current.length === 0) return;
 
     if (!messageId || typeof messageId === "object")
       messageId = messagesRef.current[messagesRef.current.length - 1]._id;
@@ -174,12 +172,12 @@ export default function Splits() {
           file_name: "",
           _id: successMessage.inserted_id,
         };
-        sentMessage = messageQueue.find((queueItem) => {
+        sentMessage = messageQueue.current.find((queueItem) => {
           console.log(queueItem);
-          return queueItem.payload.id === successMessage.message_id;
+          return queueItem.id === successMessage.message_id;
         });
         console.log(sentMessage);
-        stateMessage.file_name = sentMessage.payload.file_name;
+        stateMessage.file_name = sentMessage.file_name;
 
         setMessages((messages) => [...messages, stateMessage]);
         updateSeen(stateMessage._id);
@@ -243,15 +241,19 @@ export default function Splits() {
     if (isScrolledToBottom(contentRef.current, 1000)) {
       setTimeout(
         () => (contentRef.current.scrollTop = contentRef.current.scrollHeight),
-        500
+        10
       );
     }
   };
 
   useEffect(() => {
-    const content = contentRef.current;
-    content.addEventListener("resize", scrollToBottom);
-    return () => content.removeEventListener("resize", scrollToBottom);
+    if ("visualViewport" in window) {
+      window.visualViewport.addEventListener("resize", scrollToBottom);
+    }
+
+    return () =>
+      window.visualViewport.removeEventListener("resize", scrollToBottom);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendMessage = (composedMessage, setComposedMessage) => {
@@ -268,6 +270,20 @@ export default function Splits() {
     setMessages((messages) => [...messages, messageObject]);
     setComposedMessage("");
     scrollToBottom();
+  };
+
+  const sendImages = (fileNames) => {
+    fileNames.forEach((fileName) => {
+      let messageObject = {
+        id: +new Date(),
+        type: "image",
+        date_created: new Date(),
+        thread_id: threadId,
+        file_name: fileName,
+      };
+      messageQueue.current.push(messageObject);
+      rEmit("_messageOut", messageObject);
+    });
   };
 
   return (
@@ -314,7 +330,11 @@ export default function Splits() {
           isTyping={isTyping}
         ></ConversationView>
       </div>
-      <ChatActions contentRef={contentRef} sendMessage={sendMessage} />
+      <ChatActions
+        contentRef={contentRef}
+        sendMessage={sendMessage}
+        sendImages={sendImages}
+      />
     </SplitsWrapper>
   );
 }

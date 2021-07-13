@@ -8,6 +8,8 @@ export const ChatBubbleWrapper = styled.div`
   width: 100%;
   clear: both;
   position: relative;
+  opacity: ${(p) => (p.dimmed ? "0.5" : "1")};
+  transition: opacity 0.5s ease-in-out;
 
   padding: ${(p) => {
     switch (p.position) {
@@ -22,6 +24,10 @@ export const ChatBubbleWrapper = styled.div`
         return "12px 8px 2px";
     }
   }};
+
+  .ant-image-img {
+    object-fit: cover;
+  }
 
   .avatar {
     float: left;

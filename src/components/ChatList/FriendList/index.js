@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FriendListWrapper } from "./styles";
-
 import { Avatar, Spin, Skeleton } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroller";
@@ -9,10 +8,41 @@ import { useHistory } from "react-router";
 import { getLoggedInUser } from "../../../utils/auth";
 import axios from "axios";
 import moment from "moment";
+import socket from "../../../WebSocket";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-export default function FriendList() {
+//For sorting conversations array efficiently.
+//Code copied from: https://stackoverflow.com/a/10124053/12466812
+(function () {
+  if (typeof Object.defineProperty === "function") {
+    try {
+      // eslint-disable-next-line no-extend-native
+      Object.defineProperty(Array.prototype, "sortBy", { value: sb });
+    } catch (e) {}
+  }
+  // eslint-disable-next-line no-extend-native
+  if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+
+  function sb(f) {
+    for (let i = this.length; i; ) {
+      var o = this[--i];
+      this[i] = [].concat(f.call(o, o, i), o);
+    }
+    this.sort(function (a, b) {
+      for (var i = 0, len = a.length; i < len; ++i) {
+        if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
+      }
+      return 0;
+    });
+    for (let i = this.length; i; ) {
+      this[--i] = this[i][this[i].length - 1];
+    }
+    return this;
+  }
+})();
+
+export default function FriendList({ setUnreadCount }) {
   const history = useHistory();
   const user = getLoggedInUser();
 
@@ -20,6 +50,19 @@ export default function FriendList() {
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+
+  const friendListRef = useRef();
+
+  useEffect(() => {
+    friendListRef.current = friendList;
+
+    let unreadCount = 0;
+    friendList.forEach((e) => {
+      if (hasNewMessage(e)) unreadCount = unreadCount + 1;
+    });
+    setUnreadCount(unreadCount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [friendList]);
 
   const getThreads = () => {
     return new Promise((resolve, reject) => {
@@ -55,16 +98,36 @@ export default function FriendList() {
     });
   };
 
+  const markNewConversation = (message) => {
+    console.log(
+      "incoming message... current state list:",
+      friendListRef.current
+    );
+    let friendListCopy = friendListRef.current.slice().map((e, index) => {
+      if (e._id === message.thread_id) {
+        e.date_updated = message.date_created;
+        e.new_for.push(user._id);
+      }
+      return e;
+    });
+
+    friendListCopy = friendListCopy.sortBy(function (o) {
+      return o.date_updated;
+    });
+    friendListCopy = friendListCopy.reverse();
+    setFriendlist(friendListCopy);
+    window.navigator.vibrate(50); // vibrate for 50ms
+  };
+
   useEffect(() => {
     if (user._id === null) return history.push("/");
-    /* connectSocket(); */
-    /* socket.on("_messageIn", markNewConversation); */
+    socket.on("_messageIn", markNewConversation);
     document.addEventListener("visibilitychange", updateConversations);
     fetchFriends(() => null);
-    /* subscribeUser(); */
+
     // returned function will be called on component unmount
     return () => {
-      /* socket.off("_messageIn", markNewConversation); */
+      socket.off("_messageIn", markNewConversation);
       document.removeEventListener("visibilitychange", updateConversations);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,14 +162,6 @@ export default function FriendList() {
   const hasNewMessage = (conversation) =>
     conversation.new_for.includes(user._id);
 
-  /* useEffect(() => {
-    setInitialLoad(true);
-    fetchFriends((res) => {
-      setFriendlist(res.results);
-      setInitialLoad(false);
-    });
-  }, []); */
-
   return (
     <FriendListWrapper>
       {initialLoad ? (
@@ -136,7 +191,9 @@ export default function FriendList() {
             renderItem={(conversation) => (
               <StyledList.Item
                 key={conversation._id}
-                onClick={() => history.push("/splits/" + conversation._id)}
+                onClick={() =>
+                  history.push("/conversations/" + conversation._id)
+                }
               >
                 <StyledList.Item.Meta
                   avatar={
@@ -149,7 +206,7 @@ export default function FriendList() {
                     getThreadContact(conversation).name.familyName
                   }`}
                   description={
-                    (hasNewMessage ? "New Messages . " : "") +
+                    (hasNewMessage(conversation) ? "New Messages . " : "") +
                     "Texted " +
                     moment(conversation.date_updated).fromNow()
                   }

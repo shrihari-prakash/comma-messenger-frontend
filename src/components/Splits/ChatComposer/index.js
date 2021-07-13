@@ -5,24 +5,24 @@ import { StyledTextArea } from "../../common/TextArea/styles";
 import { ChatComposerWrapper } from "./styles";
 import { useParams } from "react-router-dom";
 import { rEmit } from "../../../utils/socket";
+import ImageUploader from "./ImageUploader";
 
 const TEXT = "TEXT";
 const IMAGE = "IMAGE";
 
 var timeout = undefined;
 
-export default function ChatComposer({ contentRef, sendMessage }) {
+export default function ChatComposer({ sendMessage, sendImages }) {
   const [composeMode, setComposeMode] = useState(IMAGE);
   const [typing, setTyping] = useState(false);
   const [composedMessage, setComposedMessage] = useState("");
+  const [isImageUploadVisible, setIsImageUploadVisible] = useState(false);
 
   const inputRef = useRef();
 
   const { threadId } = useParams();
 
-  const isEmptyOrSpaces = (str) => {
-    return str === null || str.match(/^ *$/) !== null;
-  };
+  const isEmptyOrSpaces = (str) => str === null || str.match(/^ *$/) !== null;
 
   const updateComposedMessage = (event) => {
     let composed = event.target.value;
@@ -32,20 +32,7 @@ export default function ChatComposer({ contentRef, sendMessage }) {
   const onTextChange = (e) => {
     let composed = e.target.value;
     updateComposedMessage(e);
-
     isEmptyOrSpaces(composed) ? setComposeMode(IMAGE) : setComposeMode(TEXT);
-  };
-
-  const isScrolledToBottom = (e) =>
-    e.scrollHeight - e.scrollTop - e.clientHeight <= 500;
-
-  const scrollToBottom = () => {
-    if (isScrolledToBottom(contentRef.current)) {
-      setTimeout(
-        () => (contentRef.current.scrollTop = contentRef.current.scrollHeight),
-        100
-      );
-    }
   };
 
   const emitTyping = (boolean) => {
@@ -60,14 +47,12 @@ export default function ChatComposer({ contentRef, sendMessage }) {
   function timeoutFunction() {
     setTyping(false);
     emitTyping(false);
-    console.log("stopped typing.");
   }
 
   function onKeyDownNotEnter() {
     if (typing === false) {
       setTyping(true);
       emitTyping(true);
-      console.log("typing...");
       timeout = setTimeout(timeoutFunction, 2000);
     } else {
       clearTimeout(timeout);
@@ -76,12 +61,13 @@ export default function ChatComposer({ contentRef, sendMessage }) {
   }
 
   const send = (e) => {
-    console.log("send triggered", composedMessage);
-    if (!isEmptyOrSpaces(composedMessage)) {
-      sendMessage(composedMessage, setComposedMessage);
-      inputRef.current.focus();
-    }
+    if (isEmptyOrSpaces(composedMessage)) return;
+    sendMessage(composedMessage, setComposedMessage);
+    inputRef.current.focus();
+    setComposeMode(IMAGE);
   };
+
+  const openImageUploader = () => setIsImageUploadVisible(true);
 
   return (
     <ChatComposerWrapper>
@@ -90,7 +76,6 @@ export default function ChatComposer({ contentRef, sendMessage }) {
         size="large"
         placeholder="Type something..."
         onChange={onTextChange}
-        onFocus={scrollToBottom}
         onKeyDown={onKeyDownNotEnter}
         ref={inputRef}
         value={composedMessage}
@@ -100,10 +85,15 @@ export default function ChatComposer({ contentRef, sendMessage }) {
           <SendOutlined />
         </ActionButton>
       ) : (
-        <ActionButton>
+        <ActionButton onClick={openImageUploader}>
           <PictureOutlined />
         </ActionButton>
       )}
+      <ImageUploader
+        isImageUploadVisible={isImageUploadVisible}
+        setIsImageUploadVisible={setIsImageUploadVisible}
+        sendImages={sendImages}
+      />
     </ChatComposerWrapper>
   );
 }

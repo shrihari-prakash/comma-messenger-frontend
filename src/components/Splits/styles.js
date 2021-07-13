@@ -47,7 +47,7 @@ export const HeaderUserWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: large;
+  font-weight: bold;
   color: ${Theme.COLORS.ON_BACKGROUND};
 
   .user-name {

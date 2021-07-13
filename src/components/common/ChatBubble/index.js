@@ -10,6 +10,7 @@ export default function ChatBubble({
   tight = false,
   children,
   recipientInfo,
+  dimmed,
 }) {
   return (
     <ChatBubbleWrapper
@@ -18,6 +19,7 @@ export default function ChatBubble({
       ghost={ghost}
       textSize={textSize || "small"}
       tight={tight}
+      dimmed={dimmed}
     >
       {type === "other" && (position === "first" || position === "only") && (
         <div className="avatar">

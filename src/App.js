@@ -9,10 +9,11 @@ import React, { useEffect } from "react";
 import { UserProvider } from "./contexts/UserContext";
 import socket from "./WebSocket";
 import { rEmit } from "./utils/socket";
+import subscribeUser from "./subscription";
 
 const routes = [
   { path: "/conversations", name: "Conversations", Component: ChatListPage },
-  { path: "/splits/:threadId", name: "Splits", Component: SplitsPage },
+  { path: "/conversations/:threadId", name: "Splits", Component: SplitsPage },
   { path: "/login", name: "Login", Component: LoginPage },
   { path: "/", name: "Login", Component: LoginPage },
 ];
@@ -29,6 +30,7 @@ function App() {
 
     socket.on("_connect", () => {
       console.log("connected.");
+      subscribeUser();
     });
   }, []);
 

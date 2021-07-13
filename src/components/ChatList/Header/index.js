@@ -4,16 +4,16 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { getLoggedInUser } from "../../../utils/auth";
 
-const Header = () => {
+const Header = ({ showAddFriendModal, unreadCount }) => {
   const user = getLoggedInUser();
-  
+
   return (
     <HeaderContainer>
       <Greeting>Hello, {user.name.givenName}</Greeting>
       <ChatListHeading>
-        Your chats (2)
+        Your chats ({unreadCount})
         <Tooltip title="Add Friend" placement="left" mouseEnterDelay={2}>
-          <ActionButton>
+          <ActionButton onClick={showAddFriendModal}>
             <PlusOutlined />
           </ActionButton>
         </Tooltip>

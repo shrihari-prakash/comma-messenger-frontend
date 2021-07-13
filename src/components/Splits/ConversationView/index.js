@@ -29,6 +29,7 @@ export default function ConversationView({
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setIsMessagesLoading(loading), [loading]);
 
   const { threadId } = useParams();
@@ -135,7 +136,6 @@ export default function ConversationView({
         ) : (
           <div className="loading-container"></div>
         )}
-        {console.log(messages)}
         {messages.map((message, index) => (
           <div key={message._id}>
             <ChatBubble
@@ -145,12 +145,17 @@ export default function ConversationView({
               textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
               position={getMessagePosition(message, index)}
               recipientInfo={recipientInfo}
+              dimmed={!message._id ? true : false}
             >
               <MessageContent message={message} />
             </ChatBubble>
             {isLastReadMessage(message) && (
               <div className="recipient-indicator">
-                <Avatar src={recipientInfo.display_picture} size={18} />
+                <Avatar
+                  className="seen-avatar"
+                  src={recipientInfo.display_picture}
+                  size={18}
+                />
                 {isTyping && (
                   <div className="typing-container">
                     <div className="tiblock">

@@ -17,6 +17,7 @@ export const ConversationWrapper = styled.div`
     flex-direction: row-reverse;
     align-items: center;
     margin: 0 12px;
+    padding: 4px 0;
     clear: both;
 
     .typing-container {
@@ -63,6 +64,21 @@ export const ConversationWrapper = styled.div`
 
     .tidot:nth-child(3) {
       animation-delay: 400ms;
+    }
+  }
+
+  .seen-avatar {
+    animation: seenAppear 0.3s ease-in;
+
+    @keyframes seenAppear {
+      from {
+        scale: 0.1;
+        opacity: 0;
+      }
+      to {
+        scale: 1;
+        opacity: 1;
+      }
     }
   }
 `;

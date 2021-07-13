@@ -9,8 +9,6 @@ export default function MessageContent({ message }) {
   const { threadId } = useParams();
 
   const loadImage = (message, index) => {
-    return setImage("https://picsum.photos/1800");
-
     axios
       .get("/rest/v1/files/download", {
         params: {
@@ -31,15 +29,16 @@ export default function MessageContent({ message }) {
 
   useEffect(() => {
     if (message.type === "image") {
-      loadImage();
+      loadImage(message);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   switch (message.type) {
     case "text":
       return message.content;
     case "image":
-      return <Image width={200} height={200} src={image} />;
+      return <Image width={200} height={200} src={image} objectFit="cover" />;
     default:
       return null;
   }

@@ -42,6 +42,7 @@ export default function InfiniteScroll({
     handleScroll(0);
 
     return () => container.removeEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return children;

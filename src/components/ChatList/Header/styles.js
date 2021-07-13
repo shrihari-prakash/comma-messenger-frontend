@@ -16,6 +16,7 @@ export const ChatListHeading = styled.div`
   text-align: left;
   font-size: x-large;
   font-weight: bold;
+  /* font-style: italic; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
