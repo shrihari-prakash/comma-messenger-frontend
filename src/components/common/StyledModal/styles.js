@@ -23,8 +23,8 @@ export const StyledModal = styled(Modal)`
     .ant-modal-title {
       color: ${Theme.COLORS.ON_BACKGROUND};
       font-size: large;
-      font-weight: 900;
-      font-style: italic;
+      font-weight: bold;
+      /* font-style: italic; */
     }
     background-color: ${Theme.COLORS.BACKGROUND};
   }

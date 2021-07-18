@@ -40,7 +40,6 @@ export const LoginWrapper = styled.div`
 
   .app-quote {
     font-size: small;
-    font-weight: lighter;
     color: ${Theme.COLORS.ON_BACKGROUND};
     user-select: none;
     animation: appear 1.5s;

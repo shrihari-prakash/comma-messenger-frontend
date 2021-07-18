@@ -5,6 +5,7 @@ export const HeaderWrapper = styled.div`
   height: 64px;
   animation-name: headerAppear;
   animation-duration: 0.5s;
+  background-color: ${Theme.COLORS.BACKGROUND};
 
   @keyframes headerAppear {
     from {

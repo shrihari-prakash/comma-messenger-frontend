@@ -70,9 +70,27 @@ export const ChatBubbleWrapper = styled.div`
     float: ${(p) => (p.type === "mine" ? "right" : "left")};
     padding: ${(p) => (p.tight === false ? "10px" : "0")};
     overflow: hidden;
+    color: ${(p) =>
+      p.type === "mine" ? Theme.COLORS.ON_ACCENT : Theme.COLORS.ON_BACKGROUND};
+    user-select: none;
 
     .ant-image {
       display: block;
+    }
+
+    .img-loader {
+      height: 200px;
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .ant-spin {
+        color: ${(p) =>
+          p.type === "mine"
+            ? Theme.COLORS.ON_ACCENT
+            : Theme.COLORS.ON_BACKGROUND};
+      }
     }
 
     @media only screen and (min-width: 768px) {

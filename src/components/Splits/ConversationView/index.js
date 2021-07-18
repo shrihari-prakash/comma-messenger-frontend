@@ -8,6 +8,7 @@ import axios from "axios";
 import { getLoggedInUser } from "../../../utils/auth";
 import { useParams } from "react-router-dom";
 import MessageContent from "./MessageContent";
+import SpotifyMiniPlayer from "../../common/SpotifyMiniPlayer";
 
 export default function ConversationView({
   contentRef,
@@ -87,31 +88,60 @@ export default function ConversationView({
     return emojiRegex.test(text) && text.length <= 40;
   };
 
-  const getMessagePosition = (message, index) => {
+  const getMessagePosition = (
+    message,
+    index,
+    hasTailMessage,
+    isTailMessage
+  ) => {
     const prevMsg = messages[index - 1] ? messages[index - 1] : {};
     const nextMsg = messages[index + 1] ? messages[index + 1] : {};
+
+    let position = null;
 
     if (
       prevMsg.sender === message.sender &&
       nextMsg.sender === message.sender
     ) {
-      return "middle";
+      position = "middle";
     } else if (
       prevMsg.sender === message.sender &&
       nextMsg.sender !== message.sender
     ) {
-      return "last";
+      position = "last";
     } else if (
       prevMsg.sender !== message.sender &&
       nextMsg.sender === message.sender
     ) {
-      return "first";
+      position = "first";
     } else if (
       prevMsg.sender !== message.sender &&
       nextMsg.sender !== message.sender
     ) {
-      return "only";
+      position = "only";
     }
+
+    if (hasTailMessage) {
+      if (position === "last") {
+        position = "middle";
+      }
+
+      if (position === "only") {
+        position = "first";
+      }
+    }
+
+    if (isTailMessage) {
+      if (position === "first") {
+        position = "middle";
+      }
+
+      if (position === "only") {
+        position = "last";
+      }
+    }
+
+    return position;
   };
 
   const isLastReadMessage = (m) => {
@@ -120,6 +150,18 @@ export default function ConversationView({
     ).last_read_message_id;
 
     return lastReadMessage === m._id;
+  };
+
+  const isSpotifyTrack = (message) =>
+    message.includes("https://open.spotify.com/track/");
+
+  const getUrlFromText = (text) => {
+    // eslint-disable-next-line
+    let urls = text.match(/(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi);
+    let url = "";
+
+    if (Array.isArray(urls)) url = urls[0];
+    return url;
   };
 
   return (
@@ -143,7 +185,11 @@ export default function ConversationView({
               ghost={isOnlyEmojis(message.content)}
               tight={isOnlyEmojis(message.content) || message.type === "image"}
               textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
-              position={getMessagePosition(message, index)}
+              position={getMessagePosition(
+                message,
+                index,
+                message.type === "text" && isSpotifyTrack(message.content)
+              )}
               recipientInfo={recipientInfo}
               dimmed={!message._id ? true : false}
             >
@@ -166,6 +212,16 @@ export default function ConversationView({
                   </div>
                 )}
               </div>
+            )}
+            {message.type === "text" && isSpotifyTrack(message.content) && (
+              <ChatBubble
+                type={message.sender === user._id ? "mine" : "other"}
+                tight={true}
+                position={getMessagePosition(message, index, false, true)}
+                dimmed={!message._id ? true : false}
+              >
+                <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
+              </ChatBubble>
             )}
           </div>
         ))}

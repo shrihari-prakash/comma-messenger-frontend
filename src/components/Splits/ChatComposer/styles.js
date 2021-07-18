@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Theme from "../../../styles/Theme";
 
 export const ChatComposerWrapper = styled.div`
   width: 100%;
@@ -12,5 +13,9 @@ export const ChatComposerWrapper = styled.div`
     flex: 1;
     resize: vertical;
     max-height: 500px;
+  }
+
+  .anticon {
+    color: ${Theme.COLORS.ON_SURFACE};
   }
 `;

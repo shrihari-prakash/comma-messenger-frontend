@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Image } from "antd";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export default function MessageContent({ message }) {
   const [image, setImage] = useState(null);
@@ -38,7 +40,13 @@ export default function MessageContent({ message }) {
     case "text":
       return message.content;
     case "image":
-      return <Image width={200} height={200} src={image} objectFit="cover" />;
+      return image ? (
+        <Image width={200} height={200} src={image} objectfit="cover" />
+      ) : (
+        <div className="img-loader">
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        </div>
+      );
     default:
       return null;
   }
