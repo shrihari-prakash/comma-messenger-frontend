@@ -195,6 +195,16 @@ export default function ConversationView({
             >
               <MessageContent message={message} />
             </ChatBubble>
+            {message.type === "text" && isSpotifyTrack(message.content) && (
+              <ChatBubble
+                type={message.sender === user._id ? "mine" : "other"}
+                tight={true}
+                position={getMessagePosition(message, index, false, true)}
+                dimmed={!message._id ? true : false}
+              >
+                <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
+              </ChatBubble>
+            )}
             {isLastReadMessage(message) && (
               <div className="recipient-indicator">
                 <Avatar
@@ -212,16 +222,6 @@ export default function ConversationView({
                   </div>
                 )}
               </div>
-            )}
-            {message.type === "text" && isSpotifyTrack(message.content) && (
-              <ChatBubble
-                type={message.sender === user._id ? "mine" : "other"}
-                tight={true}
-                position={getMessagePosition(message, index, false, true)}
-                dimmed={!message._id ? true : false}
-              >
-                <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
-              </ChatBubble>
             )}
           </div>
         ))}
