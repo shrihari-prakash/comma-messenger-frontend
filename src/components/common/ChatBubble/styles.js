@@ -53,6 +53,31 @@ export const ChatBubbleWrapper = styled.div`
     height: 44px;
   }
 
+  .timestamp {
+    float: ${(p) => (p.type === "mine" ? "right" : "left")};
+    clear: both;
+    font-size: x-small;
+    opacity: 0.5;
+    animation-name: timestampAppear;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+
+    .additional-margin {
+      height: 1px;
+    }
+  }
+
+  @keyframes timestampAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+    to {
+      opacity: 0.5;
+      transform: translateY(0);
+    }
+  }
+
   .bubble {
     margin: 1px 0;
     max-width: 80%;

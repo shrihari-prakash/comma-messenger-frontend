@@ -1,5 +1,6 @@
 import Avatar from "antd/lib/avatar/avatar";
-import React from "react";
+import moment from "moment";
+import React, { useState } from "react";
 import { ChatBubbleWrapper } from "./styles";
 
 export default function ChatBubble({
@@ -11,7 +12,11 @@ export default function ChatBubble({
   children,
   recipientInfo,
   dimmed,
+  timestamp,
 }) {
+  const [showTime, setShowTime] = useState(false);
+  const toggleShowTime = () => setShowTime(!showTime);
+
   return (
     <ChatBubbleWrapper
       type={type}
@@ -29,7 +34,15 @@ export default function ChatBubble({
       {type === "other" && position !== "first" && position !== "only" && (
         <div className="additional-margin"></div>
       )}
-      <div className="bubble">{children}</div>
+      <div className="bubble" onClick={toggleShowTime}>
+        {children}
+      </div>
+      {showTime && (
+        <div className="timestamp">
+          {type === "other" && <div className="additional-margin"></div>}
+          {moment(timestamp).format("MMM Do YY, h:mm A")}
+        </div>
+      )}
     </ChatBubbleWrapper>
   );
 }

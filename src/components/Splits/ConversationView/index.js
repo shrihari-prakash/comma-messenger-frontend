@@ -192,6 +192,7 @@ export default function ConversationView({
               )}
               recipientInfo={recipientInfo}
               dimmed={!message._id ? true : false}
+              timestamp={message.date_created}
             >
               <MessageContent message={message} />
             </ChatBubble>
