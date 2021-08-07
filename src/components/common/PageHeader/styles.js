@@ -29,6 +29,8 @@ export const HeaderSubWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${Theme.COLORS.SURFACE_LIGHTER};
+  color: ${Theme.COLORS.ON_BACKGROUND};
+  font-weight: bold;
 
   .dummy {
     width: 34px;

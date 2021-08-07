@@ -10,12 +10,23 @@ import { UserProvider } from "./contexts/UserContext";
 import socket from "./WebSocket";
 import { rEmit } from "./utils/socket";
 import subscribeUser from "./subscription";
+import routes from "./utils/routes";
+import SettingsPage from "./pages/Settings";
 
-const routes = [
-  { path: "/conversations", name: "Conversations", Component: ChatListPage },
-  { path: "/conversations/:threadId", name: "Splits", Component: SplitsPage },
-  { path: "/login", name: "Login", Component: LoginPage },
-  { path: "/", name: "Login", Component: LoginPage },
+const routesList = [
+  {
+    path: routes.conversations,
+    name: "Conversations",
+    Component: ChatListPage,
+  },
+  {
+    path: routes.conversations + "/:threadId",
+    name: "Splits",
+    Component: SplitsPage,
+  },
+  { path: routes.settings, name: "Settings", Component: SettingsPage },
+  { path: routes.login, name: "Login", Component: LoginPage },
+  { path: routes.root, name: "Login", Component: LoginPage },
 ];
 
 function App() {
@@ -39,7 +50,7 @@ function App() {
       <Router>
         <>
           <div className="App">
-            {routes.map(({ path, Component }) => (
+            {routesList.map(({ path, Component }) => (
               <Route key={path} exact path={path}>
                 {({ match }) => (
                   <CSSTransition

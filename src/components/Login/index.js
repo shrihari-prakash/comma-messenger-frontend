@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 import { useEffect } from "react";
 import { isLoggedIn } from "../../utils/auth";
 import { serverUrl } from "../../utils/url";
+import routes from "../../utils/routes";
 
 const Login = () => {
   const history = useHistory();
@@ -24,11 +25,11 @@ const Login = () => {
     window.location.href = `${serverUrl}/api/rest/v1/auth/google`;
   };
 
-  const redirectToConversations = () => history.push("/conversations");
+  const redirectToConversations = () => history.push(routes.conversations);
 
   const loginSuccess = () => {
     setAuthCookies(token, userData);
-    return history.push("/conversations");
+    return history.push(routes.conversations);
   };
 
   const setAuthCookies = (token, user) => {
@@ -60,7 +61,7 @@ const Login = () => {
       cookies.remove("userFamilyName");
       cookies.remove("userDisplayPicture");
 
-      history.push("/");
+      history.push(routes.root);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

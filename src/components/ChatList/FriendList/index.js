@@ -9,6 +9,7 @@ import { getLoggedInUser } from "../../../utils/auth";
 import axios from "axios";
 import moment from "moment";
 import socket from "../../../WebSocket";
+import routes from "../../../utils/routes";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -192,7 +193,9 @@ export default function FriendList({ setUnreadCount }) {
               <StyledList.Item
                 key={conversation._id}
                 onClick={() =>
-                  history.push("/conversations/" + conversation._id)
+                  history.push(
+                    history.push(`${routes.conversations}/${conversation._id}`)
+                  )
                 }
               >
                 <StyledList.Item.Meta

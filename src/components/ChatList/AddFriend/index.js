@@ -6,6 +6,7 @@ import { StyledButton } from "../../common/StyledButton/styles";
 import { AddFriendWrapper } from "./styles";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import routes from "../../../utils/routes";
 
 export default function AddFriend({
   isAddFriendModalVisible,
@@ -31,7 +32,7 @@ export default function AddFriend({
         if (result.data.status === 200) {
           let res = result.data.result;
           setIsAddFriendModalVisible(false);
-          history.push("/conversations/" + res._id);
+          history.push(`${routes.conversations}/${res._id}`);
         }
       })
       .catch(function (error) {
