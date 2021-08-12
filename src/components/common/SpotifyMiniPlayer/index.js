@@ -85,7 +85,7 @@ export default function SpotifyMiniPlayer({ url }) {
         </div>
         <div className="spotify-meta-container">
           <div className="spotify-song-title">
-            <div class="spotify-song-name">{spotifyMeta.name}</div>
+            <div className="spotify-song-name">{spotifyMeta.name}</div>
             <div
               aria-label="play/pause"
               onClick={playPauseAudio}

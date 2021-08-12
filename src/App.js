@@ -15,18 +15,20 @@ import SettingsPage from "./pages/Settings";
 
 const routesList = [
   {
+    id: "1",
     path: routes.conversations,
     name: "Conversations",
     Component: ChatListPage,
   },
   {
+    id: "2",
     path: routes.conversations + "/:threadId",
     name: "Splits",
     Component: SplitsPage,
   },
-  { path: routes.settings, name: "Settings", Component: SettingsPage },
-  { path: routes.login, name: "Login", Component: LoginPage },
-  { path: routes.root, name: "Login", Component: LoginPage },
+  { id: "3", path: routes.settings, name: "Settings", Component: SettingsPage },
+  { id: "4", path: routes.login, name: "Login", Component: LoginPage },
+  { id: "5", path: routes.root, name: "Login", Component: LoginPage },
 ];
 
 function App() {
@@ -50,8 +52,8 @@ function App() {
       <Router>
         <>
           <div className="App">
-            {routesList.map(({ path, Component }) => (
-              <Route key={path} exact path={path}>
+            {routesList.map(({ id, path, Component }) => (
+              <Route key={id} exact path={path}>
                 {({ match }) => (
                   <CSSTransition
                     in={match != null}

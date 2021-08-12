@@ -78,7 +78,7 @@ const Login = () => {
   return (
     <LoginWrapper>
       <div className="bg-overlay"></div>
-      <img alt="Comma Messenger" class="app-logo" src={LoginBg}></img>
+      <img alt="Comma Messenger" className="app-logo" src={LoginBg}></img>
       <div className="app-name">
         comma <span className="white">messenger</span>
       </div>
