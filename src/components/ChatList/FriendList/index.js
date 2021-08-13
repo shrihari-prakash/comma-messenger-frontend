@@ -169,7 +169,7 @@ export default function FriendList({ setUnreadCount }) {
 
   const getMessagePreview = (conversation) => {
     if (!conversation.message_preview || !conversation.message_preview.content)
-      return "No message yet.";
+      return "Tap to chat";
     return conversation.message_preview.content;
   };
 

@@ -63,8 +63,8 @@ function App() {
           dd: "%dd",
           w:  "1w",
           ww: "%dw",
-          M:  "1m",
-          MM: "%dm",
+          M:  "1mo",
+          MM: "%dmo",
           y:  "1y",
           yy: "%dy"
       }
