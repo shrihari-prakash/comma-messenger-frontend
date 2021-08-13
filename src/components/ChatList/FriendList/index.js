@@ -107,11 +107,13 @@ export default function FriendList({ setUnreadCount }) {
     let friendListCopy = friendListRef.current.slice().map((e, index) => {
       if (e._id === message.thread_id) {
         e.date_updated = message.date_created;
-        e.new_for.push(user._id);
         e.message_preview = {
           sent_by: message.sender,
           content: message.preview_text,
         };
+
+        //Mark as new only if it is from others.
+        if (!message.sender === user._id) e.new_for.push(user._id);
       }
       return e;
     });
