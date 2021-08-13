@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FriendListWrapper } from "./styles";
-import { Avatar, Spin, Skeleton } from "antd";
+import { Avatar, Spin, Skeleton, Badge } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroller";
 import { StyledList } from "../../common/List/styles";
@@ -211,7 +211,9 @@ export default function FriendList({ setUnreadCount }) {
                         " " +
                         getThreadContact(conversation).name.familyName}
                       {hasNewMessage(conversation) && (
-                        <span className="red-dot"></span>
+                        <div className="new-message-dot">
+                          <Badge color="red" />
+                        </div>
                       )}
                     </div>
                   }

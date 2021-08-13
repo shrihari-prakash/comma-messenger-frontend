@@ -1,13 +1,14 @@
 import { LockOutlined, SkinOutlined, UserOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { getLoggedInUser } from "../../utils/auth";
+import routes from "../../utils/routes";
 import { StyledList } from "../common/List/styles";
 import PageHeader from "../common/PageHeader";
 import { SettingsWrapper } from "./styles";
 
 const Settings = () => {
   const history = useHistory();
-  const onBack = () => history.push("/conversations");
+  const onBack = () => history.push(routes.conversations);
   const settingsList = [
     {
       id: 1,
@@ -18,7 +19,7 @@ const Settings = () => {
         getLoggedInUser().name.givenName +
         " " +
         getLoggedInUser().name.familyName,
-      action: () => null,
+      action: () => history.push(routes.profile),
     },
     {
       id: 2,
@@ -45,7 +46,7 @@ const Settings = () => {
       <StyledList
         dataSource={settingsList}
         renderItem={(setting) => (
-          <StyledList.Item key={setting.id}>
+          <StyledList.Item key={setting.id} onClick={setting.action}>
             <StyledList.Item.Meta
               avatar={setting.icon}
               title={setting.title}
