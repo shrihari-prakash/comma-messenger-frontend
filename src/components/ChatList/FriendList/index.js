@@ -205,9 +205,7 @@ export default function FriendList({ setUnreadCount }) {
               <StyledList.Item
                 key={conversation._id}
                 onClick={() =>
-                  history.push(
-                    history.push(`${routes.conversations}/${conversation._id}`)
-                  )
+                  history.push(`${routes.conversations}/${conversation._id}`)
                 }
               >
                 <StyledList.Item.Meta
