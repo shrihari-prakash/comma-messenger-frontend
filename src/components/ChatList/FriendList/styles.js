@@ -8,6 +8,20 @@ export const FriendListWrapper = styled.div`
   background-color: ${Theme.COLORS.SURFACE};
   overflow-y: auto;
 
+  .red-dot {
+    display: inline-block;
+    border-radius: 100%;
+    width: 4px;
+    height: 4px;
+    background-color: red;
+    margin-left: 8px;
+  }
+
+  .friend-name {
+    display: flex;
+    align-items: center;
+  }
+
   /* width */
   ::-webkit-scrollbar {
     width: 6px;

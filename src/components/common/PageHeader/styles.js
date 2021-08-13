@@ -6,6 +6,7 @@ export const HeaderWrapper = styled.div`
   animation-name: headerAppear;
   animation-duration: 0.5s;
   background-color: ${Theme.COLORS.BACKGROUND};
+  user-select: none;
 
   @keyframes headerAppear {
     from {

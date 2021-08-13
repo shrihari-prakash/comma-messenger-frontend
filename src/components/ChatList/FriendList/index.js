@@ -205,9 +205,16 @@ export default function FriendList({ setUnreadCount }) {
                       src={getThreadContact(conversation).display_picture}
                     />
                   }
-                  title={`${getThreadContact(conversation).name.givenName} ${
-                    getThreadContact(conversation).name.familyName
-                  }`}
+                  title={
+                    <div className="friend-name">
+                      {getThreadContact(conversation).name.givenName +
+                        " " +
+                        getThreadContact(conversation).name.familyName}
+                      {hasNewMessage(conversation) && (
+                        <span className="red-dot"></span>
+                      )}
+                    </div>
+                  }
                   description={
                     (hasNewMessage(conversation) ? "New Messages . " : "") +
                     "Texted " +

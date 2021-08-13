@@ -21,6 +21,7 @@ export const ChatListContainer = styled.div`
     color: ${Theme.COLORS.ON_BACKGROUND};
     font-size: large;
     cursor: pointer;
+    user-select: none;
 
     :hover {
       filter: brightness(1.3);

@@ -9,6 +9,7 @@ export const HeaderContainer = styled.div`
   flex-direction: column;
   align-items: left;
   justify-content: center;
+  user-select: none;
 `;
 
 export const ChatListHeading = styled.div`
