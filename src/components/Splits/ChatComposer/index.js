@@ -49,7 +49,7 @@ export default function ChatComposer({ sendMessage, sendImages }) {
     emitTyping(false);
   }
 
-  function onKeyDownNotEnter() {
+  function onKeyDown(e) {
     if (typing === false) {
       setTyping(true);
       emitTyping(true);
@@ -57,6 +57,14 @@ export default function ChatComposer({ sendMessage, sendImages }) {
     } else {
       clearTimeout(timeout);
       timeout = setTimeout(timeoutFunction, 2000);
+    }
+
+    if (e.shiftKey && e.key === "Enter") return;
+
+    if (e.key === "Enter") {
+      console.log("enter pressed.");
+      send();
+      e.preventDefault();
     }
   }
 
@@ -76,7 +84,7 @@ export default function ChatComposer({ sendMessage, sendImages }) {
         size="large"
         placeholder="Type something..."
         onChange={onTextChange}
-        onKeyDown={onKeyDownNotEnter}
+        onKeyDown={onKeyDown}
         ref={inputRef}
         value={composedMessage}
       ></StyledTextArea>
