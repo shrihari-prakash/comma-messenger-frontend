@@ -43,14 +43,6 @@ const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   }
 })();
 
-function truncateText(text, length) {
-  if (text.length <= length) {
-    return text;
-  }
-
-  return text.substr(0, length) + "\u2026";
-}
-
 export default function FriendList({ setUnreadCount }) {
   const history = useHistory();
   const user = getLoggedInUser();
@@ -116,6 +108,10 @@ export default function FriendList({ setUnreadCount }) {
       if (e._id === message.thread_id) {
         e.date_updated = message.date_created;
         e.new_for.push(user._id);
+        e.message_preview = {
+          sent_by: message.sender,
+          content: message.preview_text,
+        };
       }
       return e;
     });
