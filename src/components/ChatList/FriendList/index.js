@@ -174,7 +174,7 @@ export default function FriendList({ setUnreadCount }) {
   const getMessagePreview = (conversation) => {
     if (!conversation.message_preview || !conversation.message_preview.content)
       return "No message yet.";
-    return truncateText(conversation.message_preview.content, 25);
+    return conversation.message_preview.content;
   };
 
   return (
@@ -232,13 +232,15 @@ export default function FriendList({ setUnreadCount }) {
                     </div>
                   }
                   description={
-                    <>
+                    <div className="description">
                       <span className="message-preview">
                         {getMessagePreview(conversation)}
                       </span>
-                      {" - "}
-                      {moment(conversation.date_updated).fromNow()}
-                    </>
+
+                      <span className="time-from">
+                        {moment(conversation.date_updated).fromNow()}
+                      </span>
+                    </div>
                   }
                 />
               </StyledList.Item>

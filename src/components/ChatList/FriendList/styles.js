@@ -17,6 +17,24 @@ export const FriendListWrapper = styled.div`
     align-items: center;
   }
 
+  .description {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .message-preview {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .time-from {
+      float: right;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+  }
+
   /* width */
   ::-webkit-scrollbar {
     width: 6px;
