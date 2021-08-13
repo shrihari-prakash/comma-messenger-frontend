@@ -43,6 +43,14 @@ const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   }
 })();
 
+function truncateText(text, length) {
+  if (text.length <= length) {
+    return text;
+  }
+
+  return text.substr(0, length) + "\u2026";
+}
+
 export default function FriendList({ setUnreadCount }) {
   const history = useHistory();
   const user = getLoggedInUser();
@@ -163,6 +171,12 @@ export default function FriendList({ setUnreadCount }) {
   const hasNewMessage = (conversation) =>
     conversation.new_for.includes(user._id);
 
+  const getMessagePreview = (conversation) => {
+    if (!conversation.message_preview || !conversation.message_preview.content)
+      return "No message yet.";
+    return truncateText(conversation.message_preview.content, 25);
+  };
+
   return (
     <FriendListWrapper>
       {initialLoad ? (
@@ -218,9 +232,13 @@ export default function FriendList({ setUnreadCount }) {
                     </div>
                   }
                   description={
-                    (hasNewMessage(conversation) ? "New Messages . " : "") +
-                    "Texted " +
-                    moment(conversation.date_updated).fromNow()
+                    <>
+                      <span className="message-preview">
+                        {getMessagePreview(conversation)}
+                      </span>
+                      {" - "}
+                      {moment(conversation.date_updated).fromNow()}
+                    </>
                   }
                 />
               </StyledList.Item>
