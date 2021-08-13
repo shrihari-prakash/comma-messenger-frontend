@@ -26,7 +26,8 @@ export default function SpotifyMiniPlayer({ url }) {
     // eslint-disable-next-line
   }, [spotifyMeta]);
 
-  const playPauseAudio = () => {
+  const playPauseAudio = (e) => {
+    e.stopPropagation();
     let a = audioElem.current;
     console.log(isPlaying);
     if (isAudioPlaying(a)) {

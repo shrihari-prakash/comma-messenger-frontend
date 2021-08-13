@@ -202,6 +202,7 @@ export default function ConversationView({
                 tight={true}
                 position={getMessagePosition(message, index, false, true)}
                 dimmed={!message._id ? true : false}
+                timestamp={message.date_created}
               >
                 <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
               </ChatBubble>
