@@ -234,7 +234,7 @@ export default function FriendList({ setUnreadCount }) {
                       </span>
 
                       <span className="time-from">
-                        {moment(conversation.date_updated).fromNow()}
+                        {moment(conversation.date_updated).fromNow(true)}
                       </span>
                     </div>
                   }

@@ -13,6 +13,7 @@ import subscribeUser from "./subscription";
 import routes from "./utils/routes";
 import SettingsPage from "./pages/Settings";
 import ProfilePage from "./pages/Profile";
+import moment from "moment";
 
 const routesList = [
   {
@@ -47,6 +48,27 @@ function App() {
       console.log("connected.");
       subscribeUser();
     });
+
+    moment.updateLocale('en', {
+      relativeTime : {
+          future: "in %s",
+          past:   "%s ago",
+          s  : 'now',
+          ss : '%ds',
+          m:  "1m",
+          mm: "%dm",
+          h:  "1h",
+          hh: "%dh",
+          d:  "1d",
+          dd: "%dd",
+          w:  "1w",
+          ww: "%dw",
+          M:  "1m",
+          MM: "%dm",
+          y:  "1y",
+          yy: "%dy"
+      }
+  });
   }, []);
 
   return (
