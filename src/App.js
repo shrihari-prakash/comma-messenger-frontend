@@ -46,12 +46,13 @@ function App() {
     if (window.location.href.includes(message.thread_id)) return;
 
     notification.open({
-      description: (
-        <div>
-          <b>{message.username + ": "}</b>
-          {message.content || "Sent a message"}
-        </div>
+      message: (
+        <>
+          From&nbsp;
+          <b>{message.username}</b>
+        </>
       ),
+      description: message.content || "Sent a message",
       key: message.thread_id,
       getContainer: () => document.getElementById("notification-container"),
     });

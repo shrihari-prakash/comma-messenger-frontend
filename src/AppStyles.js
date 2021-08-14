@@ -4,16 +4,16 @@ import Theme from "./styles/Theme";
 export const NotificationWrapper = styled.div`
   .ant-notification-notice-message,
   .ant-notification-notice-description {
-    color: ${Theme.COLORS.ON_BACKGROUND};
+    color: ${Theme.COLORS.ON_SURFACE};
   }
 
   .ant-notification-notice-close .ant-notification-close-x {
-    color: ${Theme.COLORS.ON_BACKGROUND};
+    color: ${Theme.COLORS.ON_SURFACE};
   }
 
   .ant-notification-notice-content,
   .ant-notification-notice {
-    background-color: ${Theme.COLORS.BACKGROUND};
+    background-color: ${Theme.COLORS.SURFACE};
     border-radius: 8px;
     text-overflow: ellipsis;
     white-space: nowrap;
