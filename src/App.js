@@ -15,6 +15,7 @@ import SettingsPage from "./pages/Settings";
 import ProfilePage from "./pages/Profile";
 import moment from "moment";
 import { notification } from "antd";
+import { NotificationWrapper } from "./AppStyles";
 
 const routesList = [
   {
@@ -105,7 +106,6 @@ function App() {
                     <div className="page">
                       <PageWrapper>
                         <Component />
-                        <div id="notification-container"></div>
                       </PageWrapper>
                     </div>
                   </CSSTransition>
@@ -113,6 +113,7 @@ function App() {
               </Route>
             ))}
           </div>
+          <NotificationWrapper id="notification-container"></NotificationWrapper>
         </>
       </Router>
     </UserProvider>
