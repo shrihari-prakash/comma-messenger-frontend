@@ -14,6 +14,7 @@ import routes from "./utils/routes";
 import SettingsPage from "./pages/Settings";
 import ProfilePage from "./pages/Profile";
 import moment from "moment";
+import { notification } from "antd";
 
 const routesList = [
   {
@@ -40,6 +41,20 @@ function App() {
     rEmit("_connect", {});
   };
 
+  const openChatNotification = (message) => {
+    if (window.location.href.includes(message.thread_id)) return;
+
+    notification.open({
+      description: (
+        <div>
+          <b>{message.username + ": "}</b>
+          {message.content || "Sent a message"}
+        </div>
+      ),
+      getContainer: () => document.getElementById("notification-container"),
+    });
+  };
+
   useEffect(() => {
     socket.on("connect", connectSocket);
     socket.on("reconnect", connectSocket);
@@ -49,26 +64,28 @@ function App() {
       subscribeUser();
     });
 
-    moment.updateLocale('en', {
-      relativeTime : {
-          future: "in %s",
-          past:   "%s ago",
-          s  : 'now',
-          ss : '%ds',
-          m:  "1m",
-          mm: "%dm",
-          h:  "1h",
-          hh: "%dh",
-          d:  "1d",
-          dd: "%dd",
-          w:  "1w",
-          ww: "%dw",
-          M:  "1mo",
-          MM: "%dmo",
-          y:  "1y",
-          yy: "%dy"
-      }
-  });
+    socket.on("_messageIn", openChatNotification);
+
+    moment.updateLocale("en", {
+      relativeTime: {
+        future: "in %s",
+        past: "%s ago",
+        s: "now",
+        ss: "%ds",
+        m: "1m",
+        mm: "%dm",
+        h: "1h",
+        hh: "%dh",
+        d: "1d",
+        dd: "%dd",
+        w: "1w",
+        ww: "%dw",
+        M: "1mo",
+        MM: "%dmo",
+        y: "1y",
+        yy: "%dy",
+      },
+    });
   }, []);
 
   return (
@@ -88,6 +105,7 @@ function App() {
                     <div className="page">
                       <PageWrapper>
                         <Component />
+                        <div id="notification-container"></div>
                       </PageWrapper>
                     </div>
                   </CSSTransition>
