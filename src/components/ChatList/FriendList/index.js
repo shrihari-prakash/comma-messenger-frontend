@@ -10,6 +10,7 @@ import axios from "axios";
 import moment from "moment";
 import socket from "../../../WebSocket";
 import routes from "../../../utils/routes";
+import DataError from "../../common/DataError";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -51,8 +52,14 @@ export default function FriendList({ setUnreadCount }) {
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const initialLoadRef = useRef();
 
   const friendListRef = useRef();
+
+  useEffect(() => {
+    initialLoadRef.current = initialLoad;
+  }, [initialLoad]);
 
   useEffect(() => {
     friendListRef.current = friendList;
@@ -79,6 +86,10 @@ export default function FriendList({ setUnreadCount }) {
             let threads = result.data.result;
             resolve(threads);
           }
+        })
+        .catch((e) => {
+          console.error(e);
+          if (initialLoadRef.current === true) setLoadError(true);
         });
     });
   };
@@ -174,6 +185,13 @@ export default function FriendList({ setUnreadCount }) {
       return "Tap to chat";
     return conversation.message_preview.content;
   };
+
+  if (loadError)
+    return (
+      <FriendListWrapper>
+        <DataError />
+      </FriendListWrapper>
+    );
 
   return (
     <FriendListWrapper>

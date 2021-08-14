@@ -26,6 +26,7 @@ export default function ConversationView({
   isMessagesLoading,
   setIsMessagesLoading,
   isTyping,
+  setLoadError,
 }) {
   const messagesRef = useRef([]);
   useEffect(() => {
@@ -76,6 +77,8 @@ export default function ConversationView({
         })
         .catch((e) => {
           console.error("Error loading messages:", e);
+          setLoading(false);
+          if (messagesRef.current.length === 0) setLoadError(true);
           reject(false);
         });
     });
@@ -192,7 +195,7 @@ export default function ConversationView({
 
     document.body.removeChild(textArea);
   }
-  
+
   function copyMessage(message) {
     if (!message.content) return;
 

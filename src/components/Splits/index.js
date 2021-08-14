@@ -10,6 +10,7 @@ import ChatActions from "./ChatActions";
 import ConversationView from "./ConversationView";
 import { HeaderUserWrapper, SplitsWrapper } from "./styles";
 import { rEmit } from "../../utils/socket";
+import DataError from "../common/DataError";
 
 export default function Splits() {
   const history = useHistory();
@@ -19,6 +20,7 @@ export default function Splits() {
   const [messages, setMessages] = useState([]);
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   const messagesRef = useRef();
   const contentRef = useRef();
@@ -286,6 +288,13 @@ export default function Splits() {
     });
   };
 
+  if (loadError)
+    return (
+      <SplitsWrapper>
+        <DataError />
+      </SplitsWrapper>
+    );
+
   return (
     <SplitsWrapper>
       <PageHeader onBack={onBack}>
@@ -328,6 +337,7 @@ export default function Splits() {
           isMessagesLoading={isMessagesLoading}
           setIsMessagesLoading={setIsMessagesLoading}
           isTyping={isTyping}
+          setLoadError={setLoadError}
         ></ConversationView>
       </div>
       <ChatActions
