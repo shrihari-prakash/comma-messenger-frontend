@@ -52,6 +52,7 @@ function App() {
           {message.content || "Sent a message"}
         </div>
       ),
+      key: message.thread_id,
       getContainer: () => document.getElementById("notification-container"),
     });
   };
