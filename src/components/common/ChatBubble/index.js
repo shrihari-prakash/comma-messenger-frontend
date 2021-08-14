@@ -18,8 +18,14 @@ export default function ChatBubble({
 }) {
   const [showTime, setShowTime] = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const toggleShowTime = () => setShowTime(!showTime);
-  const toggleShowActions = () => setShowActions(!showActions);
+  const toggleShowTime = () => {
+    setShowTime(!showTime);
+    setShowActions(false);
+  };
+  const toggleShowActions = () => {
+    setShowActions(!showActions);
+    setShowTime(false);
+  };
   const bubbleClick = useSingleAndDoubleClick(
     toggleShowTime,
     toggleShowActions
