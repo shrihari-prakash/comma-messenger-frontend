@@ -4,6 +4,17 @@ import Theme from "../../../styles/Theme";
 export const SpotifyMiniPlayerWrapper = styled.div`
   width: 100%;
   height: 114px;
+  position: relative;
+
+  .spotify-progress {
+    height: 100%;
+    background-color: #000000;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.1s ease;
+  }
 
   .loading-container {
     width: 114px;
@@ -16,6 +27,7 @@ export const SpotifyMiniPlayerWrapper = styled.div`
   .spotify-player {
     display: flex;
     padding: 12px;
+    position: relative;
 
     .spotify-song-title {
       display: flex;

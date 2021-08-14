@@ -13,15 +13,29 @@ import { Spin } from "antd";
 export default function SpotifyMiniPlayer({ url }) {
   const [spotifyMeta, setSpotifyMeta] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [seekProgress, setSeekProgress] = useState(0);
   const audioElem = useRef(new Audio());
+
+  const updateSeekProgress = () => {
+    let a = audioElem.current;
+    if (a.currentTime > 0) {
+      var value = 0;
+      value = Math.floor((100 / a.duration) * a.currentTime);
+      setSeekProgress(value);
+    } else {
+      setSeekProgress(0);
+    }
+  };
 
   useEffect(() => {
     let a = audioElem.current;
     a.onended = () => setIsPlaying(false);
+    a.addEventListener("timeupdate", updateSeekProgress, false);
 
     return () => {
       a.pause();
       a.onended = null;
+      a.removeEventListener("timeupdate", updateSeekProgress, false);
     };
     // eslint-disable-next-line
   }, [spotifyMeta]);
@@ -80,6 +94,10 @@ export default function SpotifyMiniPlayer({ url }) {
 
   return (
     <SpotifyMiniPlayerWrapper>
+      <div
+        className="spotify-progress"
+        style={{ width: seekProgress + "%" }}
+      ></div>
       <div className="spotify-player">
         <div className="spotify-album-art">
           <img src={spotifyMeta.album.images[1].url} alt={spotifyMeta.name} />
@@ -87,17 +105,19 @@ export default function SpotifyMiniPlayer({ url }) {
         <div className="spotify-meta-container">
           <div className="spotify-song-title">
             <div className="spotify-song-name">{spotifyMeta.name}</div>
-            <div
-              aria-label="play/pause"
-              onClick={playPauseAudio}
-              className="spotify-play-button"
-            >
-              {isPlaying === true ? (
-                <PauseCircleFilled />
-              ) : (
-                <PlayCircleFilled />
-              )}
-            </div>
+            {spotifyMeta.preview_url && (
+              <div
+                aria-label="play/pause"
+                onClick={playPauseAudio}
+                className="spotify-play-button"
+              >
+                {isPlaying === true ? (
+                  <PauseCircleFilled />
+                ) : (
+                  <PlayCircleFilled />
+                )}
+              </div>
+            )}
           </div>
           <div className="spotify-artist-name">
             {spotifyMeta.artists[0].name}
