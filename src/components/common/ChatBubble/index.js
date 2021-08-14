@@ -1,6 +1,7 @@
 import Avatar from "antd/lib/avatar/avatar";
 import moment from "moment";
 import React, { useState } from "react";
+import useSingleAndDoubleClick from "../../../hooks/useSingleAndDoubleClick";
 import { ChatBubbleWrapper } from "./styles";
 
 export default function ChatBubble({
@@ -13,9 +14,16 @@ export default function ChatBubble({
   recipientInfo,
   dimmed,
   timestamp,
+  actions = [],
 }) {
   const [showTime, setShowTime] = useState(false);
+  const [showActions, setShowActions] = useState(false);
   const toggleShowTime = () => setShowTime(!showTime);
+  const toggleShowActions = () => setShowActions(!showActions);
+  const bubbleClick = useSingleAndDoubleClick(
+    toggleShowTime,
+    toggleShowActions
+  );
 
   return (
     <ChatBubbleWrapper
@@ -34,9 +42,22 @@ export default function ChatBubble({
       {type === "other" && position !== "first" && position !== "only" && (
         <div className="additional-margin"></div>
       )}
-      <div className="bubble" onClick={toggleShowTime}>
+      <div className="bubble" onClick={bubbleClick}>
         {children}
       </div>
+      {showActions && (
+        <div className="message-actions">
+          {type === "other" && <div className="additional-margin"></div>}
+          {actions.map((a) => (
+            <div
+              className={"action-button" + (a.disabled ? " disabled" : "")}
+              onClick={a.action}
+            >
+              {a.icon}
+            </div>
+          ))}
+        </div>
+      )}
       {showTime && (
         <div className="timestamp">
           {type === "other" && <div className="additional-margin"></div>}

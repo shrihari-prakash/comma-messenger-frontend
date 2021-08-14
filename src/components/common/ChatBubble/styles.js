@@ -67,6 +67,32 @@ export const ChatBubbleWrapper = styled.div`
     }
   }
 
+  .message-actions {
+    float: ${(p) => (p.type === "mine" ? "right" : "left")};
+    clear: both;
+    font-size: small;
+    opacity: 0.8;
+    display: flex;
+    animation-name: timestampAppear;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+
+    .additional-margin {
+      height: 1px;
+    }
+
+    .action-button {
+      cursor: pointer;
+      font-size: large;
+      margin: 0 4px;
+    }
+
+    .disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
   @keyframes timestampAppear {
     from {
       opacity: 0;

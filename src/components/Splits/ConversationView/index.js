@@ -1,4 +1,9 @@
-import { LoadingOutlined } from "@ant-design/icons";
+import {
+  CopyOutlined,
+  HeartOutlined,
+  LoadingOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
 import { Spin, Avatar } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "../../common/InfiniteScroll";
@@ -164,6 +169,49 @@ export default function ConversationView({
     return url;
   };
 
+  function fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand("copy");
+      var msg = successful ? "successful" : "unsuccessful";
+      console.log("Fallback: Copying text command was " + msg);
+    } catch (err) {
+      console.error("Fallback: Oops, unable to copy", err);
+    }
+
+    document.body.removeChild(textArea);
+  }
+  
+  function copyMessage(message) {
+    if (!message.content) return;
+
+    let text = message.content;
+
+    if (!navigator.clipboard) {
+      fallbackCopyTextToClipboard(text);
+      return;
+    }
+    navigator.clipboard.writeText(text).then(
+      function () {
+        console.log("Async: Copying to clipboard was successful!");
+      },
+      function (err) {
+        console.error("Async: Could not copy text: ", err);
+      }
+    );
+  }
+
   return (
     <InfiniteScroll
       containerRef={contentRef}
@@ -193,6 +241,25 @@ export default function ConversationView({
               recipientInfo={recipientInfo}
               dimmed={!message._id ? true : false}
               timestamp={message.date_created}
+              actions={[
+                {
+                  name: "Copy",
+                  icon: <CopyOutlined />,
+                  action: () => copyMessage(message),
+                },
+                {
+                  name: "Like",
+                  icon: <HeartOutlined />,
+                  action: () => null,
+                  disabled: true,
+                },
+                {
+                  name: "Reply",
+                  icon: <RollbackOutlined />,
+                  action: () => null,
+                  disabled: true,
+                },
+              ]}
             >
               <MessageContent message={message} />
             </ChatBubble>
