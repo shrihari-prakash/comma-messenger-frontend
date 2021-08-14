@@ -113,7 +113,7 @@ export default function FriendList({ setUnreadCount }) {
         };
 
         //Mark as new only if it is from others.
-        if (!message.sender === user._id) e.new_for.push(user._id);
+        if (message.sender !== user._id) e.new_for.push(user._id);
       }
       return e;
     });
