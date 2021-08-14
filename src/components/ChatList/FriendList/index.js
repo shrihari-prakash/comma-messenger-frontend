@@ -44,6 +44,9 @@ const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   }
 })();
 
+const mergeList = (a, b, p) =>
+  a.filter((aa) => !b.find((bb) => aa[p] === bb[p])).concat(b);
+
 export default function FriendList({ setUnreadCount }) {
   const history = useHistory();
   const user = getLoggedInUser();
@@ -72,13 +75,13 @@ export default function FriendList({ setUnreadCount }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [friendList]);
 
-  const getThreads = () => {
+  const getThreads = (offsetOverride) => {
     return new Promise((resolve, reject) => {
       axios
         .get("/rest/v1/threads/getThreads", {
           params: {
             limit: 25,
-            offset: friendList.length,
+            offset: offsetOverride || friendList.length,
           },
         })
         .then((result) => {
@@ -98,16 +101,13 @@ export default function FriendList({ setUnreadCount }) {
     if (document.visibilityState === "hidden") return;
 
     console.log("checking for new threads...");
-    let newThreads = await getThreads();
+    let newThreads = await getThreads(0);
 
-    setFriendlist((currentThreads) => {
-      var ids = new Set(currentThreads.map((d) => d._id));
-      let merged = [
-        ...currentThreads,
-        ...newThreads.filter((d) => !ids.has(d._id)),
-      ];
-      return merged;
-    });
+    setFriendlist((currentThreads) =>
+      mergeList(currentThreads, newThreads, "_id")
+        .sortBy((o) => o.date_updated)
+        .reverse()
+    );
   };
 
   const markNewConversation = (message) => {
