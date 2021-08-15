@@ -89,6 +89,15 @@ function App() {
         yy: "%dy",
       },
     });
+
+    //Dismiss all notifications after opening the app.
+    navigator.serviceWorker.ready.then((reg) => {
+      reg.getNotifications().then((notifications) => {
+        for (let i = 0; i < notifications.length; i += 1) {
+          notifications[i].close();
+        }
+      });
+    });
   }, []);
 
   return (

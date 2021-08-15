@@ -115,7 +115,9 @@ self.addEventListener("push", (e) => {
             renotify: true,
             thread_id: data.payload.thread_id,
           };
-          self.registration.showNotification(title, notificationObject);
+          e.waitUntil(
+            self.registration.showNotification(title, notificationObject)
+          );
           break;
 
         default:
