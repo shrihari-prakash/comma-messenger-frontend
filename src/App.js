@@ -36,6 +36,18 @@ const routesList = [
   { id: "6", path: routes.profile, name: "Profile", Component: ProfilePage },
 ];
 
+const dismissNotifications = () => {
+  if (document.visibilityState === "hidden") return;
+
+  navigator.serviceWorker.ready.then((reg) => {
+    reg.getNotifications().then((notifications) => {
+      for (let i = 0; i < notifications.length; i += 1) {
+        notifications[i].close();
+      }
+    });
+  });
+};
+
 function App() {
   const connectSocket = () => {
     console.log("connecting to realtime...");
@@ -91,13 +103,9 @@ function App() {
     });
 
     //Dismiss all notifications after opening the app.
-    navigator.serviceWorker.ready.then((reg) => {
-      reg.getNotifications().then((notifications) => {
-        for (let i = 0; i < notifications.length; i += 1) {
-          notifications[i].close();
-        }
-      });
-    });
+    dismissNotifications();
+
+    document.addEventListener("visibilitychange", dismissNotifications);
   }, []);
 
   return (
