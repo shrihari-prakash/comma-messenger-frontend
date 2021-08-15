@@ -135,5 +135,18 @@ self.addEventListener("notificationclick", function (event) {
   event.notification.close();
 
   let url = `https://commamessenger.netlify.app/conversations/${event.notification.tag}`;
-  event.waitUntil(self.clients.openWindow(url));
+  event.waitUntil(
+    self.clients.matchAll({ type: "window" }).then((matchingClients) => {
+      if (matchingClients[0]) {
+        if (matchingClients[0].url === url)
+          return matchingClients[0].client.focus();
+          
+        return matchingClients[0]
+          .navigate(url)
+          .then((client) => client.focus());
+      }
+
+      return self.clients.openWindow(url);
+    })
+  );
 });
