@@ -138,9 +138,8 @@ self.addEventListener("notificationclick", function (event) {
   event.waitUntil(
     self.clients.matchAll({ type: "window" }).then((matchingClients) => {
       if (matchingClients[0]) {
-        if (matchingClients[0].url === url)
-          return matchingClients[0].client.focus();
-          
+        if (matchingClients[0].url === url) return matchingClients[0].focus();
+
         return matchingClients[0]
           .navigate(url)
           .then((client) => client.focus());
