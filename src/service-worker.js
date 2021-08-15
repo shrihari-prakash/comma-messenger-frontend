@@ -102,27 +102,31 @@ self.addEventListener("push", (e) => {
   const data = e.data.json();
 
   e.waitUntil(
-    checkAppVisibility().then((isClientVisible) => {
-      console.log("is client visible?", isClientVisible);
-      if (isClientVisible === false)
-        switch (data.event) {
-          case "message_in":
-            let title = "New message from " + data.payload.username;
-            let notificationObject = {
-              body: data.payload.content,
-              icon: data.payload.icon,
-              badge:
-                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAAAXNSR0IArs4c6QAABURJREFUeF7tnH9oVWUYxz/Pvehauu1eM53hdFOxYv7Y7vyJRSFFFKaWQVamSUkaZCoSUVJkQWSmpIR/FZHYHwaya2TRD0IMoppbq8w/KkKCflE0FS2b84mzae22rZ33Pe+959ztnL+/z/d9nw/P++O89z1XsH2yOhrYibIAodTWxjhO+RZ4kcWy3Tg2YIBYx2f1HeB66/jggUtYJPuC2/h3CALrFHCx/6YcK5WdLJa1jl3/1y4ILC1kR3tp61UWyYpC9iGGZUA7hhXDMiBgII0rK4ZlQMBAGldWDMuAgIE0rqwYlgEBA2lcWTEsAwIG0riyYlgGBAykcWXFsAwIGEjjyhoMsBZUwubLDTLtkh4VZUt9Wl4xjgSKtrIsYXUxSnJtpkwOmgIbnLCUzZm0PBHD8kFAlRca0rLOhzRHMigrK4ZlUCYxrBhW3wSCrIaDr7JGw+YrDMqpmzQMWF8CtXbdDR61oMhgzQO8yyGh3HcoLlhecezTySRZ7BOY93KyNHhNdTkUHyyTzBv1FgRnV4RuHQObJpt04F9t4ecs037u1ztQXjMN60t/91hYP9HOLfqwGnUjwnN26fWMemgCrKiycysGWDsQHrRLr2fU1lqYP9LOrRhgfY4w1S69nlGvz4SJlutwtGG9qZWc5UdXoIYn4eA8EMtjgGjDatQnER53BSvItsHrQ3RhHdCxtPMNUOIK1vZauMZyvoo2rEZ9F+E6V6DKvCF4VTC3aFZWVp8CNgVLLTd6eRWsmxDMMXqwsroBeD5YWrnRQxPw9hxIDQnmGh1YB7ScdnYAzu+orxoHa2qCgYrGnLVfa1C8Lx5WAcOCp5TrMHIIvDEHShLBnQtfWV17p1kos4CFLjecveHYNQ1mp4ODCqeyslqwz1HWVMOq8W5ADWhYt42BRy2PYvrCW/hhWIDKuqcK1gbcJvQGTITt9RXirdZGj+XbFZBnWBsmwrKxRrn4Fouy0uZySORgVZbAM1fC9ArfuZsK38qk5CbTIE8fGVheR5aMgfWToNRse9DmzUF+kk8KX9WlZK8fba/D1zaQrP4EeN9JB37mpmF1DUwts7BSjmXSUm0RaRxiX1mNug1hvXGL5wO8F+IbRsHCSphSbuvSGfdzJiWVgRx8BtvD8hrI6hbgPqD/7aJyFKEZ5aPdDTxdW0bKZx/7lWVStseA/VrnCILBMmvrH3Vzm34MnTt/N08J1ZlSOebGrG+XsGDtAe50lpywPFMhu5359WEUFqzVwC5XySnsbUjJ7a78+vIJBVbTHzoucQZnw0aV05pk/Ixy+TWfwEKB5SV0uE2bBBocJvdyJiX3OvTrYRUarJY23ai4+4XayyyhzK9Lywf5AhYarKMn9JLTHXwvDv/0R+E3GcK0zDD5IR/AQoPlJdNyXLep2m9sewWitJ4byo0zhomzH3UvtBMqrKYTOjLRwXcIwx1Xwi8JZanrIRkqrPMT/cMCzzqG1WmnyiFJsjVTLvtd+IcOy0uiuU0/AWa6SKg3D1VOei9nCIcSQkt9hXxq01YkYH1xWqva/+IzYIRNEqYxhT9WNu1hP/rWkzrl7Fk+FCF/x37n+1D0sDpXx9+1ToX3811hAwJW54R/XCfJOd5DcPjjV25ZDxhYXlpHVIf/2cYuEZY5Hu0XVskCf0KXjyz+43n4hN4s53gJuNRlcwOqsrqDOXJcR5yBx1R5QOAiR9AeyaTEeG8Xia2DHwCtJ3VURwcrVblLAlzk9Y5zEgnq6ivkaz/tdtcUDazunW4+pZdpO1ejzEWYLTDHZ+JNSbh/ekqafepzZH8DrCTsW9pKLjwAAAAASUVORK5CYII=",
-              tag: data.payload.thread_id,
-              renotify: true,
-              thread_id: data.payload.thread_id,
-            };
-            self.registration.showNotification(title, notificationObject);
-            break;
+    new Promise((resolve, reject) => {
+      checkAppVisibility().then((isClientVisible) => {
+        console.log("is client visible?", isClientVisible);
+        if (isClientVisible === false)
+          switch (data.event) {
+            case "message_in":
+              let title = "New message from " + data.payload.username;
+              let notificationObject = {
+                body: data.payload.content,
+                icon: data.payload.icon,
+                badge:
+                  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAAAXNSR0IArs4c6QAABURJREFUeF7tnH9oVWUYxz/Pvehauu1eM53hdFOxYv7Y7vyJRSFFFKaWQVamSUkaZCoSUVJkQWSmpIR/FZHYHwaya2TRD0IMoppbq8w/KkKCflE0FS2b84mzae22rZ33Pe+959ztnL+/z/d9nw/P++O89z1XsH2yOhrYibIAodTWxjhO+RZ4kcWy3Tg2YIBYx2f1HeB66/jggUtYJPuC2/h3CALrFHCx/6YcK5WdLJa1jl3/1y4ILC1kR3tp61UWyYpC9iGGZUA7hhXDMiBgII0rK4ZlQMBAGldWDMuAgIE0rqwYlgEBA2lcWTEsAwIG0riyYlgGBAykcWXFsAwIGEjjyhoMsBZUwubLDTLtkh4VZUt9Wl4xjgSKtrIsYXUxSnJtpkwOmgIbnLCUzZm0PBHD8kFAlRca0rLOhzRHMigrK4ZlUCYxrBhW3wSCrIaDr7JGw+YrDMqpmzQMWF8CtXbdDR61oMhgzQO8yyGh3HcoLlhecezTySRZ7BOY93KyNHhNdTkUHyyTzBv1FgRnV4RuHQObJpt04F9t4ecs037u1ztQXjMN60t/91hYP9HOLfqwGnUjwnN26fWMemgCrKiycysGWDsQHrRLr2fU1lqYP9LOrRhgfY4w1S69nlGvz4SJlutwtGG9qZWc5UdXoIYn4eA8EMtjgGjDatQnER53BSvItsHrQ3RhHdCxtPMNUOIK1vZauMZyvoo2rEZ9F+E6V6DKvCF4VTC3aFZWVp8CNgVLLTd6eRWsmxDMMXqwsroBeD5YWrnRQxPw9hxIDQnmGh1YB7ScdnYAzu+orxoHa2qCgYrGnLVfa1C8Lx5WAcOCp5TrMHIIvDEHShLBnQtfWV17p1kos4CFLjecveHYNQ1mp4ODCqeyslqwz1HWVMOq8W5ADWhYt42BRy2PYvrCW/hhWIDKuqcK1gbcJvQGTITt9RXirdZGj+XbFZBnWBsmwrKxRrn4Fouy0uZySORgVZbAM1fC9ArfuZsK38qk5CbTIE8fGVheR5aMgfWToNRse9DmzUF+kk8KX9WlZK8fba/D1zaQrP4EeN9JB37mpmF1DUwts7BSjmXSUm0RaRxiX1mNug1hvXGL5wO8F+IbRsHCSphSbuvSGfdzJiWVgRx8BtvD8hrI6hbgPqD/7aJyFKEZ5aPdDTxdW0bKZx/7lWVStseA/VrnCILBMmvrH3Vzm34MnTt/N08J1ZlSOebGrG+XsGDtAe50lpywPFMhu5359WEUFqzVwC5XySnsbUjJ7a78+vIJBVbTHzoucQZnw0aV05pk/Ixy+TWfwEKB5SV0uE2bBBocJvdyJiX3OvTrYRUarJY23ai4+4XayyyhzK9Lywf5AhYarKMn9JLTHXwvDv/0R+E3GcK0zDD5IR/AQoPlJdNyXLep2m9sewWitJ4byo0zhomzH3UvtBMqrKYTOjLRwXcIwx1Xwi8JZanrIRkqrPMT/cMCzzqG1WmnyiFJsjVTLvtd+IcOy0uiuU0/AWa6SKg3D1VOei9nCIcSQkt9hXxq01YkYH1xWqva/+IzYIRNEqYxhT9WNu1hP/rWkzrl7Fk+FCF/x37n+1D0sDpXx9+1ToX3811hAwJW54R/XCfJOd5DcPjjV25ZDxhYXlpHVIf/2cYuEZY5Hu0XVskCf0KXjyz+43n4hN4s53gJuNRlcwOqsrqDOXJcR5yBx1R5QOAiR9AeyaTEeG8Xia2DHwCtJ3VURwcrVblLAlzk9Y5zEgnq6ivkaz/tdtcUDazunW4+pZdpO1ejzEWYLTDHZ+JNSbh/ekqafepzZH8DrCTsW9pKLjwAAAAASUVORK5CYII=",
+                tag: data.payload.thread_id,
+                renotify: true,
+                thread_id: data.payload.thread_id,
+              };
+              self.registration
+                .showNotification(title, notificationObject)
+                .then(() => resolve(true));
+              break;
 
-          default:
-            break;
-        }
+            default:
+              break;
+          }
+      });
     })
   );
 });
