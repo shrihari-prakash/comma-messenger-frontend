@@ -78,7 +78,7 @@ export default function FriendList({ setUnreadCount }) {
   const getThreads = (offsetOverride) => {
     return new Promise((resolve, reject) => {
       axios
-        .get("/rest/v1/threads/getThreads", {
+        .get("/threads/getThreads", {
           params: {
             limit: 25,
             offset: offsetOverride || friendList.length,

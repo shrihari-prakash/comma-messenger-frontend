@@ -61,7 +61,7 @@ export default function SpotifyMiniPlayer({ url }) {
     const trackId = urlSegments.pop() || urlSegments.pop(); // Handle potential trailing slash
 
     axios
-      .get("/rest/v1/spotify/getTrackInfo", {
+      .get("/spotify/getTrackInfo", {
         params: {
           track_id: trackId,
         },

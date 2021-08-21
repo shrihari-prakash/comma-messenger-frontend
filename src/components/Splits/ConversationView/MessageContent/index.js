@@ -12,7 +12,7 @@ export default function MessageContent({ message }) {
 
   const loadImage = (message, index) => {
     axios
-      .get("/rest/v1/files/download", {
+      .get("/files/download", {
         params: {
           thread_id: threadId,
           file_name: message.file_name,

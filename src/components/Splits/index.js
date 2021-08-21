@@ -90,7 +90,7 @@ export default function Splits() {
 
     console.log("checking for new messages...");
     axios
-      .get("/rest/v1/messages/getMessages", {
+      .get("/messages/getMessages", {
         params: {
           thread_id: threadId,
           limit: 10,

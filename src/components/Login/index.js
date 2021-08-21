@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import Cookies from "universal-cookie";
 import { useEffect } from "react";
 import { isLoggedIn } from "../../utils/auth";
-import { serverUrl } from "../../utils/url";
+import { apiBasePath, serverUrl } from "../../utils/url";
 import routes from "../../utils/routes";
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
 
   const redirectToGoogle = () => {
     /*  window.location.href = "http://localhost:26398/api/rest/v1/auth/google"; */
-    window.location.href = `${serverUrl}/api/rest/v1/auth/google`;
+    window.location.href = `${serverUrl}${apiBasePath}/auth/google`;
   };
 
   const redirectToConversations = () => history.push(routes.conversations);

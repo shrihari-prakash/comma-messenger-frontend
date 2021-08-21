@@ -24,7 +24,7 @@ export default function AddFriend({
   const sendCreateRequest = (values) => {
     console.log("creating conversation...");
     axios
-      .get("/rest/v1/threads/newThread", {
+      .get("/threads/newThread", {
         params: { email: values.email },
       })
       .then(function (result) {

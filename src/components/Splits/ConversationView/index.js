@@ -57,7 +57,7 @@ export default function ConversationView({
     return new Promise((resolve, reject) => {
       setLoading(true);
       axios
-        .get("/rest/v1/messages/getMessages", {
+        .get("/messages/getMessages", {
           params: {
             thread_id: threadId,
             limit: 25,

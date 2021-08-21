@@ -22,7 +22,7 @@ function urlBase64ToUint8Array(base64String) {
 
 function sendSubscription(subscription) {
   return axios
-    .post("/rest/v1/notifications/subscribe", {
+    .post("/notifications/subscribe", {
       subscription,
     })
     .then(function (response) {

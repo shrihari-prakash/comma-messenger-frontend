@@ -5,14 +5,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
-import { serverUrl } from "./utils/url";
+import { apiBasePath, serverUrl } from "./utils/url";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
 /* axios.defaults.baseURL = "http://localhost:26398/api/"; */
-axios.defaults.baseURL = `${serverUrl}/api/`;
+axios.defaults.baseURL = `${serverUrl}${apiBasePath}`;
 
 //On success of any API request, increase token validity by one day, because that's what the backend does too.
 //This is done so that as long as the user is active, they are never logged out.
