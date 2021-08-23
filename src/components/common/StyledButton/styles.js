@@ -11,7 +11,7 @@ text-transform: uppercase;
 border: none;
 outline: none;
 cursor: pointer;
-color: ${Theme.COLORS.ON_ACCENT};
+color: ${Theme.COLORS.ON_SURFACE};
 background-color: ${Theme.COLORS.SURFACE_LIGHTER};
 border: none;
 display: flex;
@@ -20,7 +20,7 @@ justify-content: center;
 
 :hover {
   border-color: ${Theme.COLORS.ACCENT};
-  color: ${Theme.COLORS.ON_ACCENT};
+  color: ${Theme.COLORS.ON_SURFACE};
   background-color: ${Theme.COLORS.SURFACE_LIGHTER};
   outline: 0;
   -webkit-box-shadow: 0 0 0 2px ${Theme.COLORS.ACCENT}66;

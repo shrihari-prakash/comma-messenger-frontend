@@ -17,6 +17,7 @@ const Settings = () => {
   const cookies = new Cookies();
 
   const onBack = () => history.push(routes.conversations);
+  const navigateProfile = () => history.push(routes.profile);
   const logout = () => {
     const cookieList = [
       "SSID",
@@ -30,18 +31,16 @@ const Settings = () => {
     cookieList.forEach((c) => cookies.remove(c));
     history.push(routes.login);
   };
-  
+
   const settingsList = [
     {
       id: 1,
       icon: <UserOutlined />,
       title: "My Profile",
-      description:
-        "Logged in as " +
-        getLoggedInUser().name.givenName +
-        " " +
-        getLoggedInUser().name.familyName,
-      action: () => history.push(routes.profile),
+      description: `Logged in as ${getLoggedInUser().name.givenName} ${
+        getLoggedInUser().name.familyName
+      }`,
+      action: navigateProfile,
     },
     {
       id: 2,
@@ -50,13 +49,13 @@ const Settings = () => {
       description: null,
       action: () => null,
     },
-    {
+    /* {
       id: 3,
       icon: <LockOutlined />,
       title: "Privacy",
       description: null,
       action: () => null,
-    },
+    }, */
     {
       id: 4,
       icon: <LogoutOutlined />,

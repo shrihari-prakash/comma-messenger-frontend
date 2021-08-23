@@ -11,7 +11,7 @@ export const ActionButton = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
-  color: ${Theme.COLORS.ON_ACCENT};
+  color: ${Theme.COLORS.ON_SURFACE};
   background-color: ${Theme.COLORS.SURFACE_LIGHTER};
   border-radius: 100%;
 
