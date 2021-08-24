@@ -17,7 +17,7 @@ export const ChatListContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 16px 0px rgba(0, 0, 0, 0.8);
+    box-shadow: ${Theme.BUTTON.SHADOW};
     color: ${Theme.COLORS.ON_BACKGROUND};
     font-size: large;
     cursor: pointer;

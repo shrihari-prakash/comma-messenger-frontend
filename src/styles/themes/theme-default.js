@@ -16,9 +16,11 @@ const theme_default = {
     },
     BUTTON: {
       BORDER_RADIUS: "25px",
+      SHADOW: "0 0 16px 0px rgba(0, 0, 0, 0.8)",
     },
     CONTAINER: {
       BORDER_RADIUS: "12px",
+      SHADOW: "0px 0px 13px 1px rgba(0, 0, 0, 0.3)",
     },
     LIST: {
       BORDER_RADIUS: "15px",
