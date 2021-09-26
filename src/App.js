@@ -16,6 +16,7 @@ import ProfilePage from "./pages/Profile";
 import moment from "moment";
 import { notification } from "antd";
 import { NotificationWrapper } from "./AppStyles";
+import ThemeSelectorPage from "./pages/ThemeSelector";
 
 const routesList = [
   {
@@ -34,6 +35,7 @@ const routesList = [
   { id: "4", path: routes.login, name: "Login", Component: LoginPage },
   { id: "5", path: routes.root, name: "Login", Component: LoginPage },
   { id: "6", path: routes.profile, name: "Profile", Component: ProfilePage },
+  { id: "7", path: routes.themes, name: "Themes", Component: ThemeSelectorPage },
 ];
 
 const dismissNotifications = () => {

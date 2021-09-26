@@ -18,6 +18,7 @@ const Settings = () => {
 
   const onBack = () => history.push(routes.conversations);
   const navigateProfile = () => history.push(routes.profile);
+  const navigateThemes = () => history.push(routes.themes);
   const logout = () => {
     const cookieList = [
       "SSID",
@@ -47,7 +48,7 @@ const Settings = () => {
       icon: <SkinOutlined />,
       title: "Themes",
       description: null,
-      action: () => null,
+      action: navigateThemes,
     },
     /* {
       id: 3,
