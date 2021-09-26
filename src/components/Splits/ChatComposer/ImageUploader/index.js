@@ -34,7 +34,7 @@ export default function ImageUploader({
         formData.append("attachment", file);
         formData.append("thread_id", threadId);
         promises.push(
-          axios.post("rest/v1/files/upload", formData, {
+          axios.post("/files/upload", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
