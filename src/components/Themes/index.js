@@ -5,7 +5,12 @@ import routes from "../../utils/routes";
 import { StyledList } from "../common/List/styles";
 import PageHeader from "../common/PageHeader";
 import ChatPreview from "./ChatPreview";
-import { ThemeSelectorWrapper } from "./styles";
+import {
+  ChooseThemeHeader,
+  ThemeColorIcon,
+  ThemeIconSet,
+  ThemeSelectorWrapper,
+} from "./styles";
 
 export default function ThemeSelector() {
   const history = useHistory();
@@ -18,6 +23,7 @@ export default function ThemeSelector() {
       id: t.id,
       displayName: t.displayName,
       name: t.name,
+      colors: t.themeVariables.COLORS,
       action: () => setTheme(t),
     }));
     setThemeList(list);
@@ -35,11 +41,26 @@ export default function ThemeSelector() {
         <div className="dummy"></div>
       </PageHeader>
       <ChatPreview />
+      <ChooseThemeHeader>Choose a Theme</ChooseThemeHeader>
       <StyledList
         dataSource={themeList}
         renderItem={(theme) => (
           <StyledList.Item key={theme.id} onClick={theme.action}>
-            <StyledList.Item.Meta title={theme.displayName} />
+            <StyledList.Item.Meta
+              avatar={
+                <ThemeIconSet>
+                  <ThemeColorIcon color={theme.colors.ACCENT} />
+                  <ThemeColorIcon color={theme.colors.BACKGROUND} />
+                  <ThemeColorIcon color={theme.colors.SURFACE} />
+                </ThemeIconSet>
+              }
+              title={theme.displayName}
+              description={
+                localStorage.getItem("comma_theme_preference") === theme.name
+                  ? "Currently Applied"
+                  : ""
+              }
+            />
           </StyledList.Item>
         )}
       />

@@ -5,4 +5,5 @@ export const ChatPreviewWrapper = styled.div`
   width: 100%;
   padding: 12px;
   background-color: ${Theme.COLORS.BACKGROUND};
+  color: ${Theme.COLORS.ON_BACKGROUND};
 `;
