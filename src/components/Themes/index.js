@@ -53,8 +53,8 @@ export default function ThemeSelector() {
                 avatar={
                   <ThemeIconSet themeBaseType={theme.themeBaseType}>
                     <ThemeColorIcon color={theme.colors.ACCENT} />
+                    <ThemeColorIcon color={theme.colors.RECEIVE_BUBBLE} />
                     <ThemeColorIcon color={theme.colors.BACKGROUND} />
-                    <ThemeColorIcon color={theme.colors.SURFACE} />
                   </ThemeIconSet>
                 }
                 title={theme.displayName}
