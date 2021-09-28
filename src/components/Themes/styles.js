@@ -2,15 +2,26 @@ import styled from "styled-components";
 import Theme from "../../styles/Theme";
 
 export const ThemeSelectorWrapper = styled.div`
+  position: relative;
   height: 100%;
   width: 100%;
   backdrop-filter: brightness(1.3);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ThemeListWrapper = styled.div`
+  width: 100%;
+  overflow-y: auto;
 `;
 
 export const ThemeIconSet = styled.div`
   display: flex;
   border-radius: ${Theme.CONTAINER.BORDER_RADIUS};
-  background-color: ${p => p.themeBaseType === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"};
+  background-color: ${(p) =>
+    p.themeBaseType === "dark"
+      ? "rgba(255, 255, 255, 0.1)"
+      : "rgba(0, 0, 0, 0.1)"};
   padding: 12px 4px;
 `;
 

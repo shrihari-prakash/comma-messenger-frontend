@@ -9,6 +9,7 @@ import {
   ChooseThemeHeader,
   ThemeColorIcon,
   ThemeIconSet,
+  ThemeListWrapper,
   ThemeSelectorWrapper,
 } from "./styles";
 
@@ -43,28 +44,30 @@ export default function ThemeSelector() {
       </PageHeader>
       <ChatPreview />
       <ChooseThemeHeader>Choose a Theme</ChooseThemeHeader>
-      <StyledList
-        dataSource={themeList}
-        renderItem={(theme) => (
-          <StyledList.Item key={theme.id} onClick={theme.action}>
-            <StyledList.Item.Meta
-              avatar={
-                <ThemeIconSet themeBaseType={theme.themeBaseType}>
-                  <ThemeColorIcon color={theme.colors.ACCENT} />
-                  <ThemeColorIcon color={theme.colors.BACKGROUND} />
-                  <ThemeColorIcon color={theme.colors.SURFACE} />
-                </ThemeIconSet>
-              }
-              title={theme.displayName}
-              description={
-                localStorage.getItem("comma_theme_preference") === theme.name
-                  ? "Currently Applied"
-                  : ""
-              }
-            />
-          </StyledList.Item>
-        )}
-      />
+      <ThemeListWrapper>
+        <StyledList
+          dataSource={themeList}
+          renderItem={(theme) => (
+            <StyledList.Item key={theme.id} onClick={theme.action}>
+              <StyledList.Item.Meta
+                avatar={
+                  <ThemeIconSet themeBaseType={theme.themeBaseType}>
+                    <ThemeColorIcon color={theme.colors.ACCENT} />
+                    <ThemeColorIcon color={theme.colors.BACKGROUND} />
+                    <ThemeColorIcon color={theme.colors.SURFACE} />
+                  </ThemeIconSet>
+                }
+                title={theme.displayName}
+                description={
+                  localStorage.getItem("comma_theme_preference") === theme.name
+                    ? "Currently Applied"
+                    : ""
+                }
+              />
+            </StyledList.Item>
+          )}
+        />
+      </ThemeListWrapper>
     </ThemeSelectorWrapper>
   );
 }
