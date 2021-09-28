@@ -23,6 +23,7 @@ export default function ThemeSelector() {
       id: t.id,
       displayName: t.displayName,
       name: t.name,
+      themeBaseType: t.themeBaseType,
       colors: t.themeVariables.COLORS,
       action: () => setTheme(t),
     }));
@@ -48,7 +49,7 @@ export default function ThemeSelector() {
           <StyledList.Item key={theme.id} onClick={theme.action}>
             <StyledList.Item.Meta
               avatar={
-                <ThemeIconSet>
+                <ThemeIconSet themeBaseType={theme.themeBaseType}>
                   <ThemeColorIcon color={theme.colors.ACCENT} />
                   <ThemeColorIcon color={theme.colors.BACKGROUND} />
                   <ThemeColorIcon color={theme.colors.SURFACE} />

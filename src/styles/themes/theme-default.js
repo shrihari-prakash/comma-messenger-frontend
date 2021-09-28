@@ -2,12 +2,14 @@ const theme_default = {
   id: 1,
   name: "default",
   displayName: "Default",
+  themeBaseType: "dark",
   themeVariables: {
     COLORS: {
       ACCENT: "#26538D",
       SECONDARY: "#9CAFBF",
       SURFACE: "#191919",
       SURFACE_LIGHTER: "#282828",
+      RECEIVE_BUBBLE: "#282828",
       BACKGROUND: "#121212",
       APP_BACKGROUND: "#121212",
       ON_ACCENT: "#FFFFFF",

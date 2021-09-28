@@ -10,7 +10,7 @@ export const ThemeSelectorWrapper = styled.div`
 export const ThemeIconSet = styled.div`
   display: flex;
   border-radius: ${Theme.CONTAINER.BORDER_RADIUS};
-  background-color: ${Theme.COLORS.SURFACE};
+  background-color: ${p => p.themeBaseType === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"};
   padding: 12px 4px;
 `;
 

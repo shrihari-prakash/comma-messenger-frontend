@@ -2,12 +2,14 @@ const theme_light = {
   id: 2,
   name: "light",
   displayName: "Light",
+  themeBaseType: "light",
   themeVariables: {
     COLORS: {
       ACCENT: "#0099cc",
       SECONDARY: "#9CAFBF",
       SURFACE: "#F2F2F2",
       SURFACE_LIGHTER: "#E6E6E6",
+      RECEIVE_BUBBLE: "#DDDDDD",
       BACKGROUND: "#F2F2F2",
       APP_BACKGROUND: "#E6E6E6",
       ON_ACCENT: "#FFFFFF",

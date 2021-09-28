@@ -116,7 +116,7 @@ export const ChatBubbleWrapper = styled.div`
       if (p.ghost === true) return "transparent";
       return p.type === "mine"
         ? Theme.COLORS.ACCENT
-        : Theme.COLORS.SURFACE_LIGHTER;
+        : Theme.COLORS.RECEIVE_BUBBLE;
     }};
     float: ${(p) => (p.type === "mine" ? "right" : "left")};
     padding: ${(p) => (p.tight === false ? "10px" : "0")};
