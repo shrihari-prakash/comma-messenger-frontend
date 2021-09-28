@@ -3,8 +3,8 @@ const routes = {
   login: "/",
   conversations: "/conversations",
   settings: "/settings",
-  profile: "/profile",
-  themes: "/themes",
+  profile: "/settings/profile",
+  themes: "/settings/themes",
 };
 
 export default routes;
