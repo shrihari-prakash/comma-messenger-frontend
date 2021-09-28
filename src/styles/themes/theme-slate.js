@@ -5,7 +5,7 @@ const theme_slate = {
     themeBaseType: "dark",
     themeVariables: {
       COLORS: {
-        ACCENT: "#800080",
+        ACCENT: "#692a69",
         SECONDARY: "#9CAFBF",
         SURFACE: "#202224",
         SURFACE_LIGHTER: "#27292d",
