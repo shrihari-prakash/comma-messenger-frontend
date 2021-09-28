@@ -15,6 +15,7 @@ export default function ChatBubble({
   dimmed,
   timestamp,
   actions = [],
+  shouldUseClickAction = false
 }) {
   const [showTime, setShowTime] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -48,7 +49,10 @@ export default function ChatBubble({
       {type === "other" && position !== "first" && position !== "only" && (
         <div className="additional-margin"></div>
       )}
-      <div className="bubble" onClick={bubbleClick}>
+      <div
+        className="bubble"
+        onClick={shouldUseClickAction ? bubbleClick : () => null}
+      >
         {children}
       </div>
       {showActions && (

@@ -263,6 +263,7 @@ export default function ConversationView({
                   disabled: true,
                 },
               ]}
+              shouldUseClickAction={message.type === "text"}
             >
               <MessageContent message={message} />
             </ChatBubble>
