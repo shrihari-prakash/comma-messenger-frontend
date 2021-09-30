@@ -290,6 +290,7 @@ export default function Splits() {
       date_created: new Date(),
       thread_id: threadId,
       content: composedMessage,
+      liked_by: []
     };
     messageQueue.current.push(messageObject);
     rEmit("_messageOut", messageObject);
