@@ -108,6 +108,27 @@ export const ChatBubbleWrapper = styled.div`
     }
   }
 
+  .bubble-wrap {
+    .liked-avatar {
+      position: relative;
+      font-size: x-small;
+      position: absolute;
+      height: 18px;
+      width: 20px;
+      border-radius: 15px;
+      right: -6px;
+      bottom: -6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: ${Theme.COLORS.ON_BACKGROUND};
+      background-color: ${Theme.COLORS.ACCENT};
+      z-index: 1;
+      animation-name: avatarAppear;
+      animation-duration: 0.2s;
+    }
+  }
+
   .bubble {
     margin: 1px 0;
     max-width: 80%;
@@ -116,6 +137,7 @@ export const ChatBubbleWrapper = styled.div`
     text-align: left;
     word-break: break-word;
     cursor: default;
+    position: relative;
     background-color: ${(p) => {
       if (p.ghost === true) return "transparent";
       return p.type === "mine"
@@ -124,7 +146,7 @@ export const ChatBubbleWrapper = styled.div`
     }};
     float: ${(p) => (p.type === "mine" ? "right" : "left")};
     padding: ${(p) => (p.tight === false ? "10px" : "0")};
-    overflow: hidden;
+    overflow: ${(p) => (p.hideOverflow ? "hidden" : "initial")};
     color: ${(p) =>
       p.type === "mine" ? Theme.COLORS.ON_ACCENT : Theme.COLORS.ON_BACKGROUND};
     user-select: none;

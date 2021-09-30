@@ -1,5 +1,6 @@
 import {
   CopyOutlined,
+  HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   RollbackOutlined,
@@ -230,9 +231,9 @@ export default function ConversationView({
         if (m._id === message._id && Array.isArray(m.liked_by)) {
           const message = { ...m };
           if (status === "like") {
-            console.log(message.liked_by)
+            console.log(message.liked_by);
             message.liked_by.push(user._id);
-            console.log(message.liked_by)
+            console.log(message.liked_by);
           } else {
             message.liked_by = message.liked_by.filter((u) => u !== user._id);
           }
@@ -241,6 +242,27 @@ export default function ConversationView({
       })
     );
     rEmit("_updateMessageLike", likePayload);
+  };
+
+  const getLikedAvatar = (message) => {
+    let profilePhoto;
+    if (message.sender !== user._id) {
+      profilePhoto = user.display_picture;
+    } else {
+      const otherUser = threadInfo.thread_participants_info.find(
+        (p) => p._id !== user._id
+      );
+      profilePhoto = otherUser.display_picture;
+    }
+    if (Array.isArray(message.liked_by) && message.liked_by.length > 0) {
+      return (
+        <>
+          {/* <Avatar src={profilePhoto} size={18}></Avatar> */}
+          <HeartFilled />
+        </>
+      );
+    }
+    return null;
   };
 
   return (
@@ -269,6 +291,7 @@ export default function ConversationView({
                 tight={
                   isOnlyEmojis(message.content) || message.type === "image"
                 }
+                hideOverflow={message.type === "image"}
                 textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
                 position={getMessagePosition(
                   message,
@@ -299,6 +322,7 @@ export default function ConversationView({
                   },
                 ]}
                 shouldUseClickAction={message.type === "text"}
+                likedAvatar={getLikedAvatar(message)}
               >
                 <MessageContent message={message} />
               </ChatBubble>

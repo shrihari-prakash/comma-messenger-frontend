@@ -16,6 +16,7 @@ export default function ChatBubble({
   timestamp,
   actions = [],
   shouldUseClickAction = false,
+  likedAvatar,
 }) {
   const [showTime, setShowTime] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -40,6 +41,7 @@ export default function ChatBubble({
       textSize={textSize || "small"}
       tight={tight}
       dimmed={dimmed}
+      hideOverflow={false}
     >
       {type === "other" && (position === "first" || position === "only") && (
         <div className="avatar">
@@ -49,11 +51,14 @@ export default function ChatBubble({
       {type === "other" && position !== "first" && position !== "only" && (
         <div className="additional-margin"></div>
       )}
-      <div
-        className="bubble"
-        onClick={shouldUseClickAction ? bubbleClick : () => null}
-      >
-        {children}
+      <div className="bubble-wrap">
+        <div
+          className="bubble"
+          onClick={shouldUseClickAction ? bubbleClick : () => null}
+        >
+          {children}
+          {likedAvatar && <div className="liked-avatar">{likedAvatar}</div>}
+        </div>
       </div>
       {showActions && (
         <div className="message-actions">
