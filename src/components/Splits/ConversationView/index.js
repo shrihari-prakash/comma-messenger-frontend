@@ -14,6 +14,7 @@ import { getLoggedInUser } from "../../../utils/auth";
 import { useParams } from "react-router-dom";
 import MessageContent from "./MessageContent";
 import SpotifyMiniPlayer from "../../common/SpotifyMiniPlayer";
+import { rEmit } from "../../../utils/socket";
 
 export default function ConversationView({
   contentRef,
@@ -215,6 +216,33 @@ export default function ConversationView({
     );
   }
 
+  const updateLike = (message, liked) => {
+    const status = liked === true ? "like" : "unlike";
+    console.log("updating like status...");
+    let likePayload = {
+      thread_id: threadId,
+      liked_message_id: message._id,
+      status: status,
+    };
+
+    setMessages(
+      messagesRef.current.map((m) => {
+        if (m._id === message._id && Array.isArray(m.liked_by)) {
+          const message = { ...m };
+          if (status === "like") {
+            console.log(message.liked_by)
+            message.liked_by.push(user._id);
+            console.log(message.liked_by)
+          } else {
+            message.liked_by = message.liked_by.filter((u) => u !== user._id);
+          }
+          return message;
+        } else return m;
+      })
+    );
+    rEmit("_updateMessageLike", likePayload);
+  };
+
   return (
     <InfiniteScroll
       containerRef={contentRef}
@@ -229,75 +257,83 @@ export default function ConversationView({
         ) : (
           <div className="loading-container"></div>
         )}
-        {messages.map((message, index) => (
-          <div key={message._id}>
-            <ChatBubble
-              type={message.sender === user._id ? "mine" : "other"}
-              ghost={isOnlyEmojis(message.content)}
-              tight={isOnlyEmojis(message.content) || message.type === "image"}
-              textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
-              position={getMessagePosition(
-                message,
-                index,
-                message.type === "text" && isSpotifyTrack(message.content)
-              )}
-              recipientInfo={recipientInfo}
-              dimmed={!message._id ? true : false}
-              timestamp={message.date_created}
-              actions={[
-                {
-                  name: "Copy",
-                  icon: <CopyOutlined />,
-                  action: () => copyMessage(message),
-                },
-                {
-                  name: "Like",
-                  icon: <HeartOutlined />,
-                  action: () => null,
-                  disabled: true,
-                },
-                {
-                  name: "Reply",
-                  icon: <RollbackOutlined />,
-                  action: () => null,
-                  disabled: true,
-                },
-              ]}
-              shouldUseClickAction={message.type === "text"}
-            >
-              <MessageContent message={message} />
-            </ChatBubble>
-            {message.type === "text" && isSpotifyTrack(message.content) && (
+        {messages.map((message, index) => {
+          const liked =
+            Array.isArray(message.liked_by) &&
+            message.liked_by.includes(user._id);
+          return (
+            <div key={message._id}>
               <ChatBubble
                 type={message.sender === user._id ? "mine" : "other"}
-                tight={true}
-                position={getMessagePosition(message, index, false, true)}
+                ghost={isOnlyEmojis(message.content)}
+                tight={
+                  isOnlyEmojis(message.content) || message.type === "image"
+                }
+                textSize={isOnlyEmojis(message.content) ? "xx-large" : "small"}
+                position={getMessagePosition(
+                  message,
+                  index,
+                  message.type === "text" && isSpotifyTrack(message.content)
+                )}
+                recipientInfo={recipientInfo}
                 dimmed={!message._id ? true : false}
                 timestamp={message.date_created}
+                actions={[
+                  {
+                    name: "Copy",
+                    icon: <CopyOutlined />,
+                    action: () => copyMessage(message),
+                  },
+                  {
+                    name: "Like",
+                    icon: <HeartOutlined />,
+                    action: () => updateLike(message, !liked),
+                    active: liked,
+                    disabled: false,
+                  },
+                  {
+                    name: "Reply",
+                    icon: <RollbackOutlined />,
+                    action: () => null,
+                    disabled: true,
+                  },
+                ]}
+                shouldUseClickAction={message.type === "text"}
               >
-                <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
+                <MessageContent message={message} />
               </ChatBubble>
-            )}
-            {isLastReadMessage(message) && (
-              <div className="recipient-indicator">
-                <Avatar
-                  className="seen-avatar"
-                  src={recipientInfo.display_picture}
-                  size={18}
-                />
-                {isTyping && (
-                  <div className="typing-container">
-                    <div className="tiblock">
-                      <div className="tidot"></div>
-                      <div className="tidot"></div>
-                      <div className="tidot"></div>
+              {message.type === "text" && isSpotifyTrack(message.content) && (
+                <ChatBubble
+                  type={message.sender === user._id ? "mine" : "other"}
+                  tight={true}
+                  position={getMessagePosition(message, index, false, true)}
+                  dimmed={!message._id ? true : false}
+                  timestamp={message.date_created}
+                >
+                  <SpotifyMiniPlayer url={getUrlFromText(message.content)} />
+                </ChatBubble>
+              )}
+              {isLastReadMessage(message) && (
+                <div className="recipient-indicator">
+                  <Avatar
+                    className="seen-avatar"
+                    src={recipientInfo.display_picture}
+                    size={18}
+                  />
+                  {isTyping && (
+                    <div className="typing-container">
+                      <div className="tiblock">
+                        <div className="tidot"></div>
+                        <div className="tidot"></div>
+                        <div className="tidot"></div>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </ConversationWrapper>
     </InfiniteScroll>
   );

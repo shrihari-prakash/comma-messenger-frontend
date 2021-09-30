@@ -143,6 +143,29 @@ export default function Splits() {
     setThreadInfo(() => ti);
   };
 
+  const setMessageLike = (payload) => {
+    if (payload.thread_id !== threadId) return;
+    const status = payload.status;
+
+    setMessages(
+      messagesRef.current.map((m) => {
+        if (m._id === payload.liked_message_id && Array.isArray(m.liked_by)) {
+          const message = { ...m };
+          const thread = { ...threadInfoRef.current };
+          const otherUserId = thread.thread_participants.find(
+            (uId) => uId !== user._id
+          );
+          if (status === "like") {
+            message.liked_by.push(otherUserId);
+          } else {
+            message.liked_by = message.liked_by.filter((u) => u !== otherUserId);
+          }
+          return message;
+        } else return m;
+      })
+    );
+  };
+
   const setTypingStatus = (payload) => {
     if (payload.thread_id === threadId) setIsTyping(payload.status);
   };
@@ -215,6 +238,7 @@ export default function Splits() {
   useEffect(() => {
     socket.on("_messageIn", addMessageToState);
     socket.on("_messageSeen", setOtherUserMessageSeen);
+    socket.on("_messageLike", setMessageLike);
     socket.on("_typingStatus", setTypingStatus);
     socket.on("_success", successHandler);
     socket.on("_connect", checkForNewMessages);
@@ -225,6 +249,7 @@ export default function Splits() {
     return () => {
       socket.off("_messageIn", addMessageToState);
       socket.off("_messageSeen", setOtherUserMessageSeen);
+      socket.off("_messageLike", setMessageLike);
       socket.off("_typingStatus", setTypingStatus);
       socket.off("_success", successHandler);
       socket.off("_connect", checkForNewMessages);

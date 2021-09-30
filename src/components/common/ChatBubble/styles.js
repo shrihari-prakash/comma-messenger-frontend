@@ -91,6 +91,10 @@ export const ChatBubbleWrapper = styled.div`
       opacity: 0.6;
       cursor: not-allowed;
     }
+
+    .active {
+      color: ${Theme.COLORS.ACCENT};
+    }
   }
 
   @keyframes timestampAppear {

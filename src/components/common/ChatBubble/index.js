@@ -15,7 +15,7 @@ export default function ChatBubble({
   dimmed,
   timestamp,
   actions = [],
-  shouldUseClickAction = false
+  shouldUseClickAction = false,
 }) {
   const [showTime, setShowTime] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -60,7 +60,11 @@ export default function ChatBubble({
           {type === "other" && <div className="additional-margin"></div>}
           {actions.map((a) => (
             <div
-              className={"action-button" + (a.disabled ? " disabled" : "")}
+              className={
+                "action-button" +
+                (a.disabled ? " disabled" : "") +
+                (a.active ? " active" : "")
+              }
               onClick={a.action}
             >
               {a.icon}
