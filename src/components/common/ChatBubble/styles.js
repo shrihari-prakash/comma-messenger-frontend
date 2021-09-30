@@ -10,6 +10,7 @@ export const ChatBubbleWrapper = styled.div`
   position: relative;
   opacity: ${(p) => (p.dimmed ? "0.5" : "1")};
   transition: opacity 0.5s ease-in-out;
+  user-select: none;
 
   padding: ${(p) => {
     switch (p.position) {
@@ -149,7 +150,6 @@ export const ChatBubbleWrapper = styled.div`
     overflow: ${(p) => (p.hideOverflow ? "hidden" : "initial")};
     color: ${(p) =>
       p.type === "mine" ? Theme.COLORS.ON_ACCENT : Theme.COLORS.ON_BACKGROUND};
-    user-select: none;
 
     .ant-image {
       display: block;
