@@ -312,7 +312,7 @@ export default function ConversationView({
                     icon: <HeartOutlined />,
                     action: () => updateLike(message, !liked),
                     active: liked,
-                    disabled: false,
+                    disabled: message.sender === user._id,
                   },
                   {
                     name: "Reply",

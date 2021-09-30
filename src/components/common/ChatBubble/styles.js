@@ -89,6 +89,7 @@ export const ChatBubbleWrapper = styled.div`
     }
 
     .disabled {
+      display: none;
       opacity: 0.6;
       cursor: not-allowed;
     }
