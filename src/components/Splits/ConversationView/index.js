@@ -16,6 +16,8 @@ import { useParams } from "react-router-dom";
 import MessageContent from "./MessageContent";
 import SpotifyMiniPlayer from "../../common/SpotifyMiniPlayer";
 import { rEmit } from "../../../utils/socket";
+import audioPlayer from "../../../singleton/audio";
+import { sounds } from "../../../utils/sounds";
 
 export default function ConversationView({
   contentRef,
@@ -241,6 +243,7 @@ export default function ConversationView({
         } else return m;
       })
     );
+    if (liked) audioPlayer.src(sounds.MESSAGE_LIKE).play();
     rEmit("_updateMessageLike", likePayload);
   };
 

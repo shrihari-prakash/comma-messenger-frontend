@@ -11,6 +11,8 @@ import ConversationView from "./ConversationView";
 import { HeaderUserWrapper, SplitsWrapper } from "./styles";
 import { rEmit } from "../../utils/socket";
 import DataError from "../common/DataError";
+import audioPlayer from "../../singleton/audio";
+import { sounds } from "../../utils/sounds";
 
 export default function Splits() {
   const history = useHistory();
@@ -167,6 +169,8 @@ export default function Splits() {
         } else return m;
       })
     );
+
+    if (status === "like") audioPlayer.src(sounds.MESSAGE_LIKE).play();
   };
 
   const setTypingStatus = (payload) => {
