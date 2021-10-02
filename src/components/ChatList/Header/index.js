@@ -9,9 +9,14 @@ const Header = ({ showAddFriendModal, unreadCount }) => {
 
   return (
     <HeaderContainer>
-      <Greeting>Hello, {user.name.givenName}</Greeting>
+      <Greeting>
+        Hello, {user.name.givenName}{" "}
+        <span role="img" aria-label="hello-emoji">
+          👋
+        </span>
+      </Greeting>
       <ChatListHeading>
-        Your chats ({unreadCount})
+        Your chats {unreadCount > 0 && `(${unreadCount})`}
         <Tooltip title="Add Friend" placement="left" mouseEnterDelay={2}>
           <ActionButton onClick={showAddFriendModal}>
             <PlusOutlined />
