@@ -17,6 +17,7 @@ export default function ChatBubble({
   actions = [],
   shouldUseClickAction = false,
   likedAvatar,
+  hideOverflow = false,
 }) {
   const [showTime, setShowTime] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -41,7 +42,7 @@ export default function ChatBubble({
       textSize={textSize || "small"}
       tight={tight}
       dimmed={dimmed}
-      hideOverflow={false}
+      hideOverflow={hideOverflow}
     >
       {type === "other" && (position === "first" || position === "only") && (
         <div className="avatar">
