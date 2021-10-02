@@ -115,7 +115,7 @@ export const ChatBubbleWrapper = styled.div`
       position: relative;
       font-size: x-small;
       position: absolute;
-      height: 20px;
+      height: 18px;
       width: 22px;
       border-radius: 15px;
       right: -6px;
@@ -125,7 +125,7 @@ export const ChatBubbleWrapper = styled.div`
       justify-content: center;
       color: ${Theme.COLORS.ON_BACKGROUND};
       background-color: ${Theme.COLORS.ACCENT};
-      border: 3px solid ${Theme.COLORS.BACKGROUND};
+      border: 2px solid ${Theme.COLORS.BACKGROUND};
       z-index: 1;
       animation-name: avatarAppear;
       animation-duration: 0.2s;
