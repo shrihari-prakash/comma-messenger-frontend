@@ -323,6 +323,7 @@ export default function ConversationView({
                 ]}
                 shouldUseClickAction={message.type === "text"}
                 likedAvatar={getLikedAvatar(message)}
+                shouldAnimate={message.animate_entrance === true}
               >
                 <MessageContent message={message} />
               </ChatBubble>

@@ -151,6 +151,18 @@ export const ChatBubbleWrapper = styled.div`
     overflow: ${(p) => (p.hideOverflow ? "hidden" : "initial")};
     color: ${(p) =>
       p.type === "mine" ? Theme.COLORS.ON_ACCENT : Theme.COLORS.ON_BACKGROUND};
+    animation: ${(p) =>
+      p.shouldAnimate && !p.dimmed ? "popOut 0.3s ease-in-out 1" : "none"};
+
+    @keyframes popOut {
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .ant-image-img {
+      object-fit: cover;
+    }
 
     .ant-image {
       display: block;

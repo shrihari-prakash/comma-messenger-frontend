@@ -55,6 +55,7 @@ export default function Splits() {
     let isAlreadyAdded = messages.find((msg) => msg._id === message._id);
 
     if (!isAlreadyAdded) {
+      message.animate_entrance = true;
       setMessages((messages) => [...messages, message]);
       updateSeen(message._id);
 
@@ -158,7 +159,9 @@ export default function Splits() {
           if (status === "like") {
             message.liked_by.push(otherUserId);
           } else {
-            message.liked_by = message.liked_by.filter((u) => u !== otherUserId);
+            message.liked_by = message.liked_by.filter(
+              (u) => u !== otherUserId
+            );
           }
           return message;
         } else return m;
@@ -290,7 +293,8 @@ export default function Splits() {
       date_created: new Date(),
       thread_id: threadId,
       content: composedMessage,
-      liked_by: []
+      liked_by: [],
+      animate_entrance: true,
     };
     messageQueue.current.push(messageObject);
     rEmit("_messageOut", messageObject);
